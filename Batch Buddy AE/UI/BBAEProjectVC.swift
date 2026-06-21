@@ -179,7 +179,7 @@ class BBAEProjectVC :	UMViewController, ObservableObject {
 		}
 		UMNotify.observeString (keyword: project.statusUpdateKey) { [weak self] status in
 			XMain.execute {
-				self?.statusText = status
+				self?.statusText = status ?? ""
 			}
 			self?.lblStatus?.setValue (status)
 			self?.displayButtonToBeRenderedOnly ()
