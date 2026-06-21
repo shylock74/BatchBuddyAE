@@ -632,7 +632,7 @@ struct BBAETemplateListDetailPane: View {
 								UMUIMiniSwitch(
 									"Group of Templates",
 									isOn: Binding(
-										get: { comp.isGroup },
+										get: { comp.isGroup ?? false },
 										set: { newValue in
 											comp.isGroup = newValue
 											vc.setupNumberOfTemplatesLabel()
@@ -641,7 +641,7 @@ struct BBAETemplateListDetailPane: View {
 									)
 								)
 								
-								if comp.isGroup {
+								if comp.isGroup == true {
 									Spacer()
 									Text("\(comp.compGroupList?.count ?? 0) templates in group")
 										.font(.system(size: 11, weight: .semibold))
@@ -655,13 +655,13 @@ struct BBAETemplateListDetailPane: View {
 							}
 							
 							// Override Render Folder
-							if comp.mediaInFieldList {
+							if comp.mediaInFieldList == true {
 								Divider()
 								HStack {
 									UMUIMiniSwitch(
 										"Override Render Folder",
 										isOn: Binding(
-											get: { comp.overrideRenderFolder.override },
+											get: { comp.overrideRenderFolder.override ?? false },
 											set: { newValue in
 												comp.overrideRenderFolder.override = newValue
 												vc.project.notifyUpdate()
@@ -669,7 +669,7 @@ struct BBAETemplateListDetailPane: View {
 										)
 									)
 									
-									if comp.overrideRenderFolder.override {
+									if comp.overrideRenderFolder.override == true {
 										Spacer()
 										Text("Same folder as:")
 											.font(.system(size: 11))
