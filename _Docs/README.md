@@ -345,5 +345,18 @@ The project colors manager (`BBAEProjectColorListVC`) is modernized into a unifi
    - Actions to copy `HEX`, `AE Code` variables, and color `Fill` code utilizing `UMUICapsuleButton` styled as `.gray` size `.small`.
    - Single-line layout constraints (`.lineLimit(1)` and `.fixedSize()`) are enforced on all buttons.
 
+### BBAEProjectSettingsVC Unified Architecture
+
+The project settings panel (`BBAEProjectSettingsVC`) is refactored into a single, unified SwiftUI manager layout:
+1. **SwiftUI Hosting Layer**: In `viewDidLoad`, all storyboard-loaded views are removed, and a SwiftUI root view `BBAEProjectSettingsView` is loaded dynamically via `NSHostingView`. Legacy outlets are safely retained as optional variables to preserve nib load compatibility.
+2. **Card-Based Structure**: Organizes configuration parameters inside bounded card layers styled with `UMUIBoxView` and `UMUISection` headers:
+   - **Project Details**: `UMUITextField` for changing the project's title.
+   - **After Effects Project**: Custom drop zone `ProjectAepDropZone` enabling `.onDrop` file imports for `.aep` files, missing file status badges, and launch action buttons (`UMUICapsuleButton`).
+   - **Output Directory**: Target directory picker using `UMFileDialogs.chooseFolder` and switches for subfolders and comp naming parameters (`UMUIMiniSwitch`).
+   - **Naming Prefixes**: Textfields for global prefix, midfix, and suffix settings.
+   - **Custom AE Engine**: Drag-and-drop target `ProjectAERenderDropZone` to bind custom `aerender` binaries, clear buttons, and a Rosetta launch mode toggle.
+   - **Maintenance**: Maintenance controls including "Remove All Records" which safely trigger existing AppKit-based confirmation alerts (`UMAlert.twoButtons`).
+3. **State Updates**: Uses local publisher observers listening to `"BBAESettingsChanged"` to update path text fields and switch states when modified.
+
 
 

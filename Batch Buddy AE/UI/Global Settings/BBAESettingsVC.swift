@@ -308,7 +308,7 @@ struct BBAESettingsRenderingView: View {
 						
 						Spacer()
 						
-						UMUICapsuleButton(systemImage: "gearshape", style: .gray, size: .small) {
+						UMUICapsuleButton("", systemImage: "gearshape", style: .gray, size: .small) {
 							vc.openRenderSettingsSheet()
 						}
 						.frame(width: 24)
@@ -341,7 +341,7 @@ struct BBAESettingsRenderingView: View {
 						
 						Spacer()
 						
-						UMUICapsuleButton(systemImage: "gearshape", style: .gray, size: .small) {
+						UMUICapsuleButton("", systemImage: "gearshape", style: .gray, size: .small) {
 							vc.openOutputModuleSheet()
 						}
 						.frame(width: 24)

@@ -138,7 +138,7 @@ struct BBAEProjectColorListView: View {
 				
 				Spacer()
 				
-				UMUICapsuleButton(systemImage: "plus", style: .accent, size: .small) {
+				UMUICapsuleButton("", systemImage: "plus", style: .accent, size: .small) {
 					vc.addColor()
 				}
 				.frame(width: 28)
@@ -193,7 +193,7 @@ struct ColorListRow: View {
 		self.bbaeProject = bbaeProject
 		self.vc = vc
 		_colorName = State(initialValue: colorItem.name)
-		_colorVal = State(initialValue: Color(nsColor: colorItem.color.getColor()))
+		_colorVal = State(initialValue: Color(colorItem.color.getColor()))
 	}
 	
 	var body: some View {
@@ -258,7 +258,7 @@ struct ColorListRow: View {
 			.fixedSize()
 			
 			// Remove Button
-			UMUICapsuleButton(systemImage: "trash", style: .gray, size: .small) {
+			UMUICapsuleButton("", systemImage: "trash", style: .gray, size: .small) {
 				vc.removeColor(bbaeColor: colorItem)
 			}
 			.lineLimit(1)
