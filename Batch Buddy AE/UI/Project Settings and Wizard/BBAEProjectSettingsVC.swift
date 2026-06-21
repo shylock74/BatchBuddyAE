@@ -78,12 +78,10 @@ class BBAEProjectSettingsVC :	UMViewController, ObservableObject {
 			message: "Choose Render Folder For Project",
 			defaultPath: project.renderFolder_
 		) { [weak self] url in
-			if let url = url {
-				self?.project.renderFolder_ = url
-				self?.project.save()
-				self?.project.notifyUpdate()
-				NotificationCenter.default.post(name: NSNotification.Name("BBAESettingsChanged"), object: nil)
-			}
+			self?.project.renderFolder_ = url
+			self?.project.save()
+			self?.project.notifyUpdate()
+			NotificationCenter.default.post(name: NSNotification.Name("BBAESettingsChanged"), object: nil)
 		}
 	}
 	

@@ -607,9 +607,7 @@ struct CacheDropZone: View {
 			message: "Choose Cache Folder For After Effects",
 			defaultPath: path.isEmpty ? nil : URL(fileURLWithPath: path)
 		) { url in
-			if let url = url {
-				onFolderSelected(url)
-			}
+			onFolderSelected(url)
 		}
 	}
 }
