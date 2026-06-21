@@ -338,14 +338,14 @@ class BBAETemplateListVC :	UMViewController, ObservableObject {
 	}
 	
 	@IBAction func fldTemplateNameChanged (_ sender: Any) {
-		currentSelectedComp?.name = fldTemplateName.stringValue
-		tblCompList.reloadDataInMainThread ()
+		currentSelectedComp?.name = fldTemplateName?.stringValue ?? ""
+		tblCompList?.reloadDataInMainThread ()
 		project.save ()
 		project.notifyUpdate ()
 	}
 	
 	@IBAction func fldShortNameChanged (_ sender: Any) {
-		currentSelectedComp?.shortName_ = fldShortName.stringValue
+		currentSelectedComp?.shortName_ = fldShortName?.stringValue ?? ""
 		project.save ()
 		project.notifyUpdate ()
 	}
@@ -383,7 +383,7 @@ class BBAETemplateListVC :	UMViewController, ObservableObject {
 		currentSelectedTemplate.addField (newField)
 		XMain.execute (after: 0.25) { [self] in
 			tblCompFieldList?.reloadDataInMainThread ()
-			Queue.execute (after: 0.75) {
+			Queue.execute (after: 0.75) { [self] in
 				project.updateValuesAfterStructureChange ()
 				project.notifyUpdate ()
 			}
@@ -397,8 +397,8 @@ class BBAETemplateListVC :	UMViewController, ObservableObject {
 	}
 	
 	@IBAction func btAddITem (_ sender: NSButton) {
-		if let event = NSApplication.shared.currentEvent {
-			NSMenu.popUpContextMenu (ctxMenuAddItem,
+		if let event = NSApplication.shared.currentEvent, let menu = ctxMenuAddItem {
+			NSMenu.popUpContextMenu (menu,
 									 with: event,
 									 for: sender)
 		}
@@ -549,7 +549,7 @@ struct BBAETemplateListMasterPane: View {
 			Text("Compositions")
 				.font(.system(size: 12, weight: .bold))
 				.foregroundColor(.secondary)
-				.left(width: nil)
+				.left(nil)
 				.padding(.horizontal, 12)
 				.padding(.top, 8)
 			
@@ -589,126 +589,125 @@ struct BBAETemplateListDetailPane: View {
 				ScrollView {
 					VStack(spacing: 12) {
 						// Header Card (Grouped Settings)
-						UMUIBoxView(cornerRadius: 8, borderWidth: 1, foreColor: .mildDarkGray) {
-							VStack(spacing: 10) {
-								HStack(spacing: 10) {
+						VStack(spacing: 10) {
+							HStack(spacing: 10) {
+								UMUITextField(
+									label: "Name",
+									placeholder: "Template Name",
+									value: Binding(
+										get: { comp.name },
+										set: { newValue in
+											comp.name = newValue
+											vc.tblCompList?.reloadDataInMainThread()
+											vc.project.save()
+											vc.project.notifyUpdate()
+										}
+									)
+								)
+								
+								HStack(spacing: 4) {
 									UMUITextField(
-										label: "Name",
-										placeholder: "Template Name",
+										label: "Short Name",
+										placeholder: "Short Name",
 										value: Binding(
-											get: { comp.name },
+											get: { comp.shortName },
 											set: { newValue in
-												comp.name = newValue
-												vc.tblCompList?.reloadDataInMainThread()
+												comp.shortName_ = newValue
 												vc.project.save()
 												vc.project.notifyUpdate()
+												vc.checkDuplicateShortName()
 											}
 										)
 									)
 									
-									HStack(spacing: 4) {
-										UMUITextField(
-											label: "Short Name",
-											placeholder: "Short Name",
-											value: Binding(
-												get: { comp.shortName },
-												set: { newValue in
-													comp.shortName_ = newValue
-													vc.project.save()
-													vc.project.notifyUpdate()
-													vc.checkDuplicateShortName()
-												}
-											)
-										)
-										
-										if vc.isShortNameDuplicate {
-											Image(systemName: "exclamationmark.triangle.fill")
-												.foregroundColor(.yellow)
-												.help("Duplicate short name warning")
-										}
+									if vc.isShortNameDuplicate {
+										Image(systemName: "exclamationmark.triangle.fill")
+											.foregroundColor(.yellow)
+											.help("Duplicate short name warning")
 									}
 								}
+							}
+							
+							HStack {
+								UMUIMiniSwitch(
+									"Group of Templates",
+									isOn: Binding(
+										get: { comp.isGroup },
+										set: { newValue in
+											comp.isGroup = newValue
+											vc.setupNumberOfTemplatesLabel()
+											vc.project.notifyUpdate()
+										}
+									)
+								)
 								
+								if comp.isGroup {
+									Spacer()
+									Text("\(comp.compGroupList?.count ?? 0) templates in group")
+										.font(.system(size: 11, weight: .semibold))
+										.foregroundColor(.secondary)
+									
+									UMUICapsuleButton("Group List", systemImage: "list.bullet.indent", style: .gray, size: .small) {
+										vc.btnTemplateGroupListPressed(vc)
+									}
+									.fixedSize(horizontal: true, vertical: false)
+								}
+							}
+							
+							// Override Render Folder
+							if comp.mediaInFieldList {
+								Divider()
 								HStack {
 									UMUIMiniSwitch(
-										"Group of Templates",
+										"Override Render Folder",
 										isOn: Binding(
-											get: { comp.isGroup },
+											get: { comp.overrideRenderFolder.override },
 											set: { newValue in
-												comp.isGroup = newValue
-												vc.setupNumberOfTemplatesLabel()
+												comp.overrideRenderFolder.override = newValue
 												vc.project.notifyUpdate()
 											}
 										)
 									)
 									
-									if comp.isGroup {
+									if comp.overrideRenderFolder.override {
 										Spacer()
-										Text("\(comp.compGroupList?.count ?? 0) templates in group")
-											.font(.system(size: 11, weight: .semibold))
+										Text("Same folder as:")
+											.font(.system(size: 11))
 											.foregroundColor(.secondary)
-										
-										UMUICapsuleButton("Group List", systemImage: "list.bullet.indent", style: .gray, size: .small) {
-											vc.btnTemplateGroupListPressed(vc)
-										}
-										.fixedSize(horizontal: true, vertical: false)
-									}
-								}
-								
-								// Override Render Folder
-								if comp.mediaInFieldList {
-									Divider()
-									HStack {
-										UMUIMiniSwitch(
-											"Override Render Folder",
-											isOn: Binding(
-												get: { comp.overrideRenderFolder.override },
-												set: { newValue in
-													comp.overrideRenderFolder.override = newValue
-													vc.project.notifyUpdate()
-												}
-											)
-										)
-										
-										if comp.overrideRenderFolder.override {
-											Spacer()
-											Text("Same folder as:")
-												.font(.system(size: 11))
-												.foregroundColor(.secondary)
-											Picker("", selection: Binding(
-												get: { comp.overrideRenderFolder.mediaFieldId },
-												set: { newValue in
-													comp.overrideRenderFolder.mediaFieldId = newValue
-													vc.project.notifyUpdate()
-												}
-											)) {
-												ForEach(comp.mediaFieldList, id: \.id) { field in
-													Text(field.fieldName).tag(field.id)
-												}
-												Text("Not Set").tag("")
+										Picker("", selection: Binding(
+											get: { comp.overrideRenderFolder.mediaFieldId },
+											set: { newValue in
+												comp.overrideRenderFolder.mediaFieldId = newValue
+												vc.project.notifyUpdate()
 											}
-											.pickerStyle(MenuPickerStyle())
-											.frame(width: 140)
+										)) {
+											ForEach(comp.mediaFieldList, id: \.id) { field in
+												Text(field.fieldName).tag(field.id)
+											}
+											Text("Not Set").tag("")
 										}
+										.pickerStyle(MenuPickerStyle())
+										.frame(width: 140)
 									}
-								}
-								
-								Divider()
-								
-								HStack {
-									UMUICapsuleButton(
-										"Custom AE Project" + (comp.customAEProjectUrl != nil ? " (YES)" : ""),
-										style: comp.customAEProjectUrl != nil ? .accent : .gray,
-										size: .small
-									) {
-										vc.btncustomAERenderPressed(vc)
-									}
-									.fixedSize(horizontal: true, vertical: false)
-									Spacer()
 								}
 							}
-							.padding(12)
+							
+							Divider()
+							
+							HStack {
+								UMUICapsuleButton(
+									"Custom AE Project" + (comp.customAEProjectUrl != nil ? " (YES)" : ""),
+									style: comp.customAEProjectUrl != nil ? .accent : .gray,
+									size: .small
+								) {
+									vc.btncustomAERenderPressed(vc)
+								}
+								.fixedSize(horizontal: true, vertical: false)
+								Spacer()
+							}
 						}
+						.padding(12)
+						.background(UMUIBoxView(cornerRadius: 8, borderWidth: 1, foreColor: .mildDarkGray))
 						.padding(.horizontal, 16)
 						.padding(.top, 12)
 						
