@@ -6,39 +6,41 @@
 //
 
 import Cocoa
+import SwiftUI
 import UMOmniaFramework
+import UMUIControls
 
-class BBAETemplateListVC :	UMViewController {
+class BBAETemplateListVC :	UMViewController, ObservableObject {
 	
 	static let storyboardId = 	"BBAETemplateListVC"
 	static let storyboardName =	"BBAETemplate"
 	
 	// MARK: - UI Elements
-	@IBOutlet weak var tblCompList: UMTableView!
-	@IBOutlet weak var fldTemplateName: UMTextField!
-	@IBOutlet weak var stckShortNameGroup: NSStackView!
-	@IBOutlet weak var fldShortName: UMTextField!
-	@IBOutlet weak var tblCompFieldList: UMTableView!
-	@IBOutlet var ctxMenuAddItem: NSMenu!
-	@IBOutlet weak var imgWarningDuplicate: NSImageView!
-	@IBOutlet weak var chkGroupOfTemplates: UMCheckButton!
-	@IBOutlet weak var lblNumberOfTemplates: NSTextField!
+	@IBOutlet weak var tblCompList: UMTableView?
+	@IBOutlet weak var fldTemplateName: UMTextField?
+	@IBOutlet weak var stckShortNameGroup: NSStackView?
+	@IBOutlet weak var fldShortName: UMTextField?
+	@IBOutlet weak var tblCompFieldList: UMTableView?
+	@IBOutlet var ctxMenuAddItem: NSMenu?
+	@IBOutlet weak var imgWarningDuplicate: NSImageView?
+	@IBOutlet weak var chkGroupOfTemplates: UMCheckButton?
+	@IBOutlet weak var lblNumberOfTemplates: NSTextField?
 	
-	@IBOutlet weak var chkOverrideRenderFolder: UMCheckButton!
-	@IBOutlet weak var lblSameFolderAs: NSTextField!
-	@IBOutlet weak var popSameFolderAs: UMPopUpButton!
+	@IBOutlet weak var chkOverrideRenderFolder: UMCheckButton?
+	@IBOutlet weak var lblSameFolderAs: NSTextField?
+	@IBOutlet weak var popSameFolderAs: UMPopUpButton?
 	
-	@IBOutlet weak var cnsTableTrailing: NSLayoutConstraint!
+	@IBOutlet weak var cnsTableTrailing: NSLayoutConstraint?
 
-	@IBOutlet weak var btnCustomAERender: UMRoundedRectButton!
+	@IBOutlet weak var btnCustomAERender: UMRoundedRectButton?
 	
 	// MARK: - Vars
 	var project :				BBAEProject!
-	var currentSelectedComp :	BBAEComp? {
+	@Published var currentSelectedComp :	BBAEComp? =	nil {
 		didSet {
 			XMain.execute { [weak self] in
 				self?.displayData ()
-				self?.tblCompFieldList.reloadDataInMainThread ()
+				self?.tblCompFieldList?.reloadDataInMainThread ()
 			}
 		}
 	}
@@ -46,76 +48,82 @@ class BBAETemplateListVC :	UMViewController {
 	
 	private let vcObserverId = UMId.newId (useCounter: false)
 	
+	@Published var isShortNameDuplicate: Bool = false
+	
+	var strongScrollViewCompList: NSScrollView?
+	var strongScrollViewFieldList: NSScrollView?
+	
 	// MARK: - Display
 	func setupOverrideRenderFolder () {
 		let isEnabled = currentSelectedComp?.overrideRenderFolder.override == true
 		&& currentSelectedComp?.mediaInFieldList == true
-		lblSameFolderAs.isEnabled = isEnabled
-		popSameFolderAs.isEnabled = isEnabled
-		chkOverrideRenderFolder.setup (initialValue: currentSelectedComp?.overrideRenderFolder.override == true) { [weak self] newValue in
+		lblSameFolderAs?.isEnabled = isEnabled
+		popSameFolderAs?.isEnabled = isEnabled
+		chkOverrideRenderFolder?.setup (initialValue: currentSelectedComp?.overrideRenderFolder.override == true) { [weak self] newValue in
 			self?.currentSelectedComp?.overrideRenderFolder.override = newValue
 			self?.setupOverrideRenderFolder ()
 			self?.project.notifyUpdate ()
 		}
 		guard isEnabled,
 		let currentSelectedComp = currentSelectedComp else { return }
-		popSameFolderAs.clear ()
+		popSameFolderAs?.clear ()
 		for field in currentSelectedComp.mediaFieldList {
-			popSameFolderAs.addItem (title: field.fieldName,
+			popSameFolderAs?.addItem (title: field.fieldName,
 									 value: field.id)
 		}
-		popSameFolderAs.addItem (title: "Not Set",
+		popSameFolderAs?.addItem (title: "Not Set",
 								 value: "")
-		popSameFolderAs.setValueAsString (value: currentSelectedComp.overrideRenderFolder.mediaFieldId)
+		popSameFolderAs?.setValueAsString (value: currentSelectedComp.overrideRenderFolder.mediaFieldId)
 		if currentSelectedComp.mediaFieldList.count == 1 {
-			popSameFolderAs.setValueAsString (value: currentSelectedComp.mediaFieldList.first!.fieldName)
+			popSameFolderAs?.setValueAsString (value: currentSelectedComp.mediaFieldList.first!.fieldName)
 		}
-		popSameFolderAs.userSelectedCallback = { [weak self] value in
+		popSameFolderAs?.userSelectedCallback = { [weak self] value in
 			self?.currentSelectedComp?.overrideRenderFolder.mediaFieldId = value as! String
 			self?.project.notifyUpdate ()
 		}
 	}
 	
 	func setupTemplateListTable () {
-		tblCompList.rowCount = { self.project.compList.count }
-		tblCompList.cellHeight = { _ in
+		tblCompList?.rowCount = { self.project.compList.count }
+		tblCompList?.cellHeight = { _ in
 			24
 		}
-		tblCompList.registerCell (cellId: "BBAEProjectTemplateListCellV2")
+		tblCompList?.registerCell (cellId: "BBAEProjectTemplateListCellV2")
 		
-		tblCompList.cellHandler = { [self] row in
+		tblCompList?.cellHandler = { [self] row in
 			let template = project.compList [row]
-//			let selectedRow = tblTemplateList.selectedRow
-			let cell = BBAEProjectTemplateListCellV2.getCell (tblCompList,
-															  template: template,
-															  delegate: self,
-															  selected: template.id == currentSelectedComp?.id)
-			return cell
+			if let table = tblCompList {
+				let cell = BBAEProjectTemplateListCellV2.getCell (table,
+																  template: template,
+																  delegate: self,
+																  selected: template.id == currentSelectedComp?.id)
+				return cell
+			}
+			return nil
 		}
 		
-		tblCompList.rowSelected = { [self] row in
+		tblCompList?.rowSelected = { [self] row in
 			currentSelectedComp = row != nil
 				? project.compList [row!]
 				: nil
 		}
 		
-//		tblCompList.dragKey = "media.ulti.bbae.\(BBAETemplateListVC.storyboardId).compList"
-		tblCompList.sortCallback = { [self] fromIndex, toIndex in
+		tblCompList?.sortCallback = { [self] fromIndex, toIndex in
 			project.compList.move (fromOffsets: IndexSet (integer: fromIndex),
 								   toOffset: toIndex)
-			tblCompList.reloadDataInMainThread ()
+			tblCompList?.reloadDataInMainThread ()
 			project.notifyUpdate (andSave: true)
 			project.updateValuesAfterStructureChange ()
 		}
 		
-		tblCompList.reloadData ()
+		tblCompList?.reloadData ()
 	}
 	
 	// MARK: - setupTemplateCompFieldListTable
 	func setupTemplateCompFieldListTable () {
-		tblCompFieldList.rowCount = { self.currentSelectedComp?.fieldList.count ?? 0 }
+		tblCompFieldList?.rowCount = { self.currentSelectedComp?.fieldList.count ?? 0 }
 		
-		tblCompFieldList.cellHeight = { row in
+		tblCompFieldList?.cellHeight = { row in
 			guard let currentSelectedTemplate = self.currentSelectedComp else { return 0 }
 			switch currentSelectedTemplate.fieldList [row].type {
 				case .text, .checkBox:
@@ -139,30 +147,33 @@ class BBAETemplateListVC :	UMViewController {
 			}
 		}
 		
-		tblCompFieldList.cellHandler =  { [self] row in
+		tblCompFieldList?.cellHandler =  { [self] row in
 			guard let currentSelectedTemplate = currentSelectedComp else {
 				return nil
 			}
-			let cell = BBAETemplateStructureCell.getCell (tblCompFieldList,
-														  compField: currentSelectedTemplate.fieldList [row],
-														  comp: currentSelectedTemplate,
-														  project: project,
-														  delegate: self)
-			return cell
+			if let table = tblCompFieldList {
+				let cell = BBAETemplateStructureCell.getCell (table,
+															  compField: currentSelectedTemplate.fieldList [row],
+															  comp: currentSelectedTemplate,
+															  project: project,
+															  delegate: self)
+				return cell
+			}
+			return nil
 		}
 		
-		tblCompFieldList.sortCallback = { [self] fromIndex, toIndex in
+		tblCompFieldList?.sortCallback = { [self] fromIndex, toIndex in
 			guard let currentSelectedComp = currentSelectedComp else {return}
 			currentSelectedComp.fieldList.move (fromOffsets: IndexSet (arrayLiteral: fromIndex),
 												toOffset: toIndex)
-			tblCompFieldList.reloadDataInMainThread ()
+			tblCompFieldList?.reloadDataInMainThread ()
 			project.updateValuesAfterStructureChange ()
 			project.notifyUpdate (andSave: true)
 		}
 	}
 	
 	func setupCheckGroup () {
-		chkGroupOfTemplates.setup (initialValue: currentSelectedComp?.isGroup ?? false) { [weak self] newValue in
+		chkGroupOfTemplates?.setup (initialValue: currentSelectedComp?.isGroup ?? false) { [weak self] newValue in
 			self?.currentSelectedComp?.isGroup = newValue
 			self?.setupNumberOfTemplatesLabel ()
 			self?.project.notifyUpdate ()
@@ -171,17 +182,17 @@ class BBAETemplateListVC :	UMViewController {
 	
 	func setupNumberOfTemplatesLabel () {
 		if currentSelectedComp?.isGroup == true {
-			lblNumberOfTemplates.stringValue = "\(currentSelectedComp!.compGroupList!.count) Templates"
-			stckShortNameGroup.isHidden = true
+			lblNumberOfTemplates?.stringValue = "\(currentSelectedComp!.compGroupList!.count) Templates"
+			stckShortNameGroup?.isHidden = true
 		} else {
-			lblNumberOfTemplates.stringValue = ""
-			stckShortNameGroup.isHidden = false
+			lblNumberOfTemplates?.stringValue = ""
+			stckShortNameGroup?.isHidden = false
 		}
 	}
 	
 	func setupBtnCustomAERender () {
 		XMain.execute { [self] in
-			btnCustomAERender.title = "Custom AE Project" + (currentSelectedComp?.customAEProjectUrl != nil ? " YES" : "")
+			btnCustomAERender?.title = "Custom AE Project" + (currentSelectedComp?.customAEProjectUrl != nil ? " YES" : "")
 		}
 	}
 	
@@ -198,15 +209,15 @@ class BBAETemplateListVC :	UMViewController {
 			setupCheckGroup ()
 		}
 		if let currentSelectedTemplate = currentSelectedComp {
-			fldTemplateName.setValue (currentSelectedTemplate.name)
-			fldShortName.setValue (currentSelectedTemplate.shortName)
-			fldTemplateName.isHidden = false
-			fldShortName.isHidden = false
+			fldTemplateName?.setValue (currentSelectedTemplate.name)
+			fldShortName?.setValue (currentSelectedTemplate.shortName)
+			fldTemplateName?.isHidden = false
+			fldShortName?.isHidden = false
 		} else {
-			fldTemplateName.setValue ("")
-			fldShortName.setValue ("")
-			fldTemplateName.isHidden = true
-			fldShortName.isHidden = true
+			fldTemplateName?.setValue ("")
+			fldShortName?.setValue ("")
+			fldTemplateName?.isHidden = true
+			fldShortName?.isHidden = true
 		}
 		
 		idleTimer.loop (interval: 0.5) { [self] in
@@ -214,7 +225,7 @@ class BBAETemplateListVC :	UMViewController {
 				guard let selectedTemplate = (project.compList.first { $0.id == BBAETemplateListVC.selectedTemplateId! }) else { return }
 				BBAETemplateListVC.selectedTemplateId = nil
 				currentSelectedComp = selectedTemplate
-				tblCompList.reloadDataInMainThread ()
+				tblCompList?.reloadDataInMainThread ()
 				project.lastTemplateId = currentSelectedComp?.id
 			}
 			checkDuplicateShortName ()
@@ -224,8 +235,8 @@ class BBAETemplateListVC :	UMViewController {
 	}
 	
 	func update () {
-		tblCompList.reloadDataInMainThread ()
-		tblCompFieldList.reloadDataInMainThread ()
+		tblCompList?.reloadDataInMainThread ()
+		tblCompFieldList?.reloadDataInMainThread ()
 		setupBtnCustomAERender ()
 	}
 	
@@ -236,32 +247,60 @@ class BBAETemplateListVC :	UMViewController {
 	}
 	
 	// MARK: - View Cycle
+	override func viewDidLoad () {
+		super.viewDidLoad ()
+		
+		// Capture and retain the scroll views of the table views
+		self.strongScrollViewCompList = tblCompList?.enclosingScrollView
+		self.strongScrollViewFieldList = tblCompFieldList?.enclosingScrollView
+		
+		// Remove all existing subviews loaded from the storyboard to prevent overlapping!
+		self.view.subviews.forEach { subview in
+			if subview != strongScrollViewCompList && subview != strongScrollViewFieldList {
+				subview.removeFromSuperview ()
+			}
+		}
+		
+		// Seamlessly embed the modern SwiftUI View inside NSHostingView
+		let hostingView = NSHostingView (rootView: BBAETemplateListView (vc: self))
+		hostingView.translatesAutoresizingMaskIntoConstraints = false
+		
+		self.view.addSubview (hostingView)
+		
+		NSLayoutConstraint.activate ([
+			hostingView.leadingAnchor.constraint (equalTo: self.view.leadingAnchor),
+			hostingView.trailingAnchor.constraint (equalTo: self.view.trailingAnchor),
+			hostingView.topAnchor.constraint (equalTo: self.view.topAnchor),
+			hostingView.bottomAnchor.constraint (equalTo: self.view.bottomAnchor)
+		])
+	}
+
 	override func willAppear () {
 		displayData ()
 		setupObservers ()
 		setupTemplateListTable ()
-		tblCompList.reloadData ()
+		tblCompList?.reloadData ()
 		
-		if #available(OSX 11.0, *) {
-//			cnsTableLeading.constant = -20
-//			cnsTableTrailing.constant = 0
-		}
-		tblCompList.addRoundedBackground (color: NSColor (deviceWhite: 0.15, alpha: 1))
-		tblCompFieldList.addRoundedBackground (color: NSColor (deviceWhite: 0.15, alpha: 1))
+		tblCompList?.addRoundedBackground (color: NSColor (deviceWhite: 0.15, alpha: 1))
+		tblCompFieldList?.addRoundedBackground (color: NSColor (deviceWhite: 0.15, alpha: 1))
 	}
 	
 	override func loaded () {
-		BBAETemplateStructureCell.registerCells (tblCompFieldList)
+		if let table = tblCompFieldList {
+			BBAETemplateStructureCell.registerCells (table)
+		}
 	}
 	
 	// MARK: - Idle
 	func checkDuplicateShortName () {
 		XMain.execute { [self] in
-			imgWarningDuplicate.isHidden = true
-			for template in project.compList {
-				if template.id != currentSelectedComp?.id,
-				   template.shortName.lowercased () == fldShortName.stringValue.lowercased () {
-					imgWarningDuplicate.isHidden = false
+			imgWarningDuplicate?.isHidden = true
+			if let currentSelectedComp = currentSelectedComp {
+				for template in project.compList {
+					if template.id != currentSelectedComp.id,
+					   template.shortName.lowercased () == fldShortName?.stringValue.lowercased () {
+						imgWarningDuplicate?.isHidden = false
+					}
 				}
 			}
 		}
@@ -316,7 +355,7 @@ class BBAETemplateListVC :	UMViewController {
 		project.compList.append (newTemplate)
 		project.save ()
 		project.notifyUpdate ()
-		tblCompList.reloadDataInMainThread ()
+		tblCompList?.reloadDataInMainThread ()
 		currentSelectedComp = newTemplate
 		setupCheckGroup ()
 	}
@@ -343,7 +382,7 @@ class BBAETemplateListVC :	UMViewController {
 		BBAECompField.addFieldToGlobalList (newField)
 		currentSelectedTemplate.addField (newField)
 		XMain.execute (after: 0.25) { [self] in
-			tblCompFieldList.reloadDataInMainThread ()
+			tblCompFieldList?.reloadDataInMainThread ()
 			Queue.execute (after: 0.75) {
 				project.updateValuesAfterStructureChange ()
 				project.notifyUpdate ()
@@ -425,7 +464,7 @@ extension BBAETemplateListVC :	BBAEProjectTemplateListCellDelegate {
 		project.compList = project.compList.filter { $0.id != bbaeTemplate.id }
 		project.updateValuesAfterStructureChange ()
 		project.notifyUpdate ()
-		tblCompFieldList.reloadDataInMainThread ()
+		tblCompFieldList?.reloadDataInMainThread ()
 		currentSelectedComp = nil
 		setupCheckGroup ()
 		update ()
@@ -460,6 +499,287 @@ extension BBAETemplateListVC :	BBAETemplateStructureCellDelegate {
 		currentSelectedComp?.fieldList = currentSelectedComp!.fieldList.filter { $0.id != id }
 		project.updateValuesAfterStructureChange ()
 		project.notifyUpdate ()
-		tblCompFieldList.reloadDataInMainThread ()
+		tblCompFieldList?.reloadDataInMainThread ()
+	}
+}
+
+// MARK: - SwiftUI Views
+struct BBAETemplateListView : View {
+	@ObservedObject var vc: BBAETemplateListVC
+	
+	var body: some View {
+		VStack(spacing: 0) {
+			HSplitView {
+				// Master Pane (Left Column)
+				BBAETemplateListMasterPane(vc: vc)
+					.frame(minWidth: 220, maxWidth: 300)
+				
+				// Detail Pane (Right Column)
+				BBAETemplateListDetailPane(vc: vc)
+					.frame(minWidth: 440)
+			}
+			.padding(.bottom, 8)
+			
+			Divider()
+			
+			// Bottom Bar (Cancel / OK)
+			HStack {
+				Spacer()
+				UMUICapsuleButton("Cancel", style: .gray, size: .small) {
+					vc.btnCancelPressed(vc)
+				}
+				UMUICapsuleButton("OK", style: .accent, size: .small) {
+					vc.btnOkPressed(vc)
+				}
+			}
+			.padding(.horizontal, 16)
+			.padding(.vertical, 8)
+			.background(Color.mildDarkGray)
+		}
+		.background(Color.darkGray)
+	}
+}
+
+struct BBAETemplateListMasterPane: View {
+	@ObservedObject var vc: BBAETemplateListVC
+	
+	var body: some View {
+		VStack(spacing: 8) {
+			// Title/Header
+			Text("Compositions")
+				.font(.system(size: 12, weight: .bold))
+				.foregroundColor(.secondary)
+				.left(width: nil)
+				.padding(.horizontal, 12)
+				.padding(.top, 8)
+			
+			// Template List Table View
+			if let scrollView = vc.strongScrollViewCompList {
+				TableViewContainer(scrollView: scrollView)
+			} else {
+				Color.clear
+			}
+			
+			// Master Toolbar
+			HStack(spacing: 8) {
+				UMUICapsuleButton("Add", systemImage: "plus", style: .gray, size: .small) {
+					vc.btAddTemplate(vc)
+				}
+				.fixedSize(horizontal: true, vertical: false)
+				
+				UMUICapsuleButton("Import", systemImage: "square.and.arrow.down", style: .gray, size: .small) {
+					vc.btnImportCompTemplatePressed(vc)
+				}
+				.fixedSize(horizontal: true, vertical: false)
+				
+				Spacer()
+			}
+			.padding(.horizontal, 12)
+			.padding(.bottom, 8)
+		}
+	}
+}
+
+struct BBAETemplateListDetailPane: View {
+	@ObservedObject var vc: BBAETemplateListVC
+	
+	var body: some View {
+		VStack(spacing: 0) {
+			if let comp = vc.currentSelectedComp {
+				ScrollView {
+					VStack(spacing: 12) {
+						// Header Card (Grouped Settings)
+						UMUIBoxView(cornerRadius: 8, borderWidth: 1, foreColor: .mildDarkGray) {
+							VStack(spacing: 10) {
+								HStack(spacing: 10) {
+									UMUITextField(
+										label: "Name",
+										placeholder: "Template Name",
+										value: Binding(
+											get: { comp.name },
+											set: { newValue in
+												comp.name = newValue
+												vc.tblCompList?.reloadDataInMainThread()
+												vc.project.save()
+												vc.project.notifyUpdate()
+											}
+										)
+									)
+									
+									HStack(spacing: 4) {
+										UMUITextField(
+											label: "Short Name",
+											placeholder: "Short Name",
+											value: Binding(
+												get: { comp.shortName },
+												set: { newValue in
+													comp.shortName_ = newValue
+													vc.project.save()
+													vc.project.notifyUpdate()
+													vc.checkDuplicateShortName()
+												}
+											)
+										)
+										
+										if vc.isShortNameDuplicate {
+											Image(systemName: "exclamationmark.triangle.fill")
+												.foregroundColor(.yellow)
+												.help("Duplicate short name warning")
+										}
+									}
+								}
+								
+								HStack {
+									UMUIMiniSwitch(
+										"Group of Templates",
+										isOn: Binding(
+											get: { comp.isGroup },
+											set: { newValue in
+												comp.isGroup = newValue
+												vc.setupNumberOfTemplatesLabel()
+												vc.project.notifyUpdate()
+											}
+										)
+									)
+									
+									if comp.isGroup {
+										Spacer()
+										Text("\(comp.compGroupList?.count ?? 0) templates in group")
+											.font(.system(size: 11, weight: .semibold))
+											.foregroundColor(.secondary)
+										
+										UMUICapsuleButton("Group List", systemImage: "list.bullet.indent", style: .gray, size: .small) {
+											vc.btnTemplateGroupListPressed(vc)
+										}
+										.fixedSize(horizontal: true, vertical: false)
+									}
+								}
+								
+								// Override Render Folder
+								if comp.mediaInFieldList {
+									Divider()
+									HStack {
+										UMUIMiniSwitch(
+											"Override Render Folder",
+											isOn: Binding(
+												get: { comp.overrideRenderFolder.override },
+												set: { newValue in
+													comp.overrideRenderFolder.override = newValue
+													vc.project.notifyUpdate()
+												}
+											)
+										)
+										
+										if comp.overrideRenderFolder.override {
+											Spacer()
+											Text("Same folder as:")
+												.font(.system(size: 11))
+												.foregroundColor(.secondary)
+											Picker("", selection: Binding(
+												get: { comp.overrideRenderFolder.mediaFieldId },
+												set: { newValue in
+													comp.overrideRenderFolder.mediaFieldId = newValue
+													vc.project.notifyUpdate()
+												}
+											)) {
+												ForEach(comp.mediaFieldList, id: \.id) { field in
+													Text(field.fieldName).tag(field.id)
+												}
+												Text("Not Set").tag("")
+											}
+											.pickerStyle(MenuPickerStyle())
+											.frame(width: 140)
+										}
+									}
+								}
+								
+								Divider()
+								
+								HStack {
+									UMUICapsuleButton(
+										"Custom AE Project" + (comp.customAEProjectUrl != nil ? " (YES)" : ""),
+										style: comp.customAEProjectUrl != nil ? .accent : .gray,
+										size: .small
+									) {
+										vc.btncustomAERenderPressed(vc)
+									}
+									.fixedSize(horizontal: true, vertical: false)
+									Spacer()
+								}
+							}
+							.padding(12)
+						}
+						.padding(.horizontal, 16)
+						.padding(.top, 12)
+						
+						// Fields List Title
+						HStack {
+							Text("Template Fields & Variables")
+								.font(.system(size: 12, weight: .bold))
+								.foregroundColor(.secondary)
+							Spacer()
+						}
+						.padding(.horizontal, 16)
+						
+						// Fields List Scroll View
+						if let scrollView = vc.strongScrollViewFieldList {
+							TableViewContainer(scrollView: scrollView)
+								.frame(height: 260)
+								.padding(.horizontal, 16)
+						}
+						
+						// Fields Action Toolbar
+						HStack(spacing: 8) {
+							// Native SwiftUI Menu for Adding Fields
+							Menu {
+								Button("Text") { vc.addItem(tag: 0) }
+								Button("Long Text") { vc.addItem(tag: 7) }
+								Button("Checkbox") { vc.addItem(tag: 8) }
+								Button("Color Fill") { vc.addItem(tag: 3) }
+								Button("Numeric Value") { vc.addItem(tag: 5) }
+								Button("Image") { vc.addItem(tag: 1) }
+								Button("Video") { vc.addItem(tag: 2) }
+								Button("Audio") { vc.addItem(tag: 4) }
+								Button("Vector (AI)") { vc.addItem(tag: 6) }
+								Button("Record ID") { vc.addItem(tag: 9) }
+							} label: {
+								HStack(spacing: 4) {
+									Image(systemName: "plus")
+									Text("Add Field")
+								}
+							}
+							.fixedSize(horizontal: true, vertical: false)
+							
+							UMUICapsuleButton("Settings", systemImage: "gearshape", style: .gray, size: .small) {
+								vc.btnTemplateSettingsPressed(vc)
+							}
+							.fixedSize(horizontal: true, vertical: false)
+							
+							UMUICapsuleButton("Export", systemImage: "square.and.arrow.up", style: .gray, size: .small) {
+								vc.btnExportCompTemplatePressed(vc)
+							}
+							.fixedSize(horizontal: true, vertical: false)
+							
+							Spacer()
+						}
+						.padding(.horizontal, 16)
+						.padding(.bottom, 12)
+					}
+				}
+			} else {
+				VStack {
+					Spacer()
+					Image(systemName: "doc.text.magnifyingglass")
+						.font(.system(size: 40))
+						.foregroundColor(.secondary)
+					UMUIVSpacer(8)
+					Text("Select a Template to Edit")
+						.font(.system(size: 13, weight: .semibold))
+						.foregroundColor(.secondary)
+					Spacer()
+				}
+				.frame(maxWidth: .infinity, maxHeight: .infinity)
+			}
+		}
 	}
 }

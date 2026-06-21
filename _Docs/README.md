@@ -313,3 +313,14 @@ The project detail view (`BBAEProjectVC`) is implemented as a hybrid layout:
    - `UMUIMiniSwitch` for batch toggles like "Render All".
 3. **AppKit Table Wrapper**: The AppKit-based table view (`UMTableView`) and its custom cell adapters (`BBAERecordCell`, `BBAERecordCompactRow`) are preserved and wrapped within SwiftUI using `NSViewRepresentable` (`TableViewContainer`). This guarantees perfect backward compatibility with existing storyboards, context menus, and custom row height computation.
 
+### BBAETemplateListVC Split-View Architecture
+
+The composition template manager (`BBAETemplateListVC`) implements a highly functional two-pane split layout:
+1. **SwiftUI Hosting Layer**: In `viewDidLoad`, all storyboard subviews except the master template list scroll view and detail template fields list scroll view are removed. The controller embeds a root SwiftUI view (`BBAETemplateListView`) using `NSHostingView`.
+2. **Master-Detail Layout**: Utilizes SwiftUI's native `HSplitView` containing:
+   - **Master Pane (Left)**: Houses the AppKit templates table wrapped via `NSViewRepresentable` and action triggers to add or import template configurations.
+   - **Detail Pane (Right)**: Standard settings grouped inside a bounded card layout using `UMUIBoxView` and inputs styled with `UMUITextField` (Name, Short Name), `UMUIMiniSwitch` (Group of Templates, Override Render Folder), and custom conditional Pickers. Beneath the settings sits the AppKit fields table wrapped via `NSViewRepresentable` and an action toolbar.
+3. **Menu Integration**: Replaced standard context menus with a native, inline SwiftUI `Menu` offering options to append new variables and dynamic fields (Text, Color Fill, Image, Video, Checkbox, etc.) to the composition.
+4. **Layout Protection**: Strict line-limit configurations (`.lineLimit(1)`) and `.fixedSize(horizontal: true, vertical: false)` prevent button labels from wrapping or splitting under constrained widths.
+
+
