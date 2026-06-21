@@ -358,5 +358,18 @@ The project settings panel (`BBAEProjectSettingsVC`) is refactored into a single
    - **Maintenance**: Maintenance controls including "Remove All Records" which safely trigger existing AppKit-based confirmation alerts (`UMAlert.twoButtons`).
 3. **State Updates**: Uses local publisher observers listening to `"BBAESettingsChanged"` to update path text fields and switch states when modified.
 
+### BBAERecordVC Unified Architecture
+
+The template instance record editor window (`BBAERecordVC`) has been refactored into a unified SwiftUI interface:
+1. **SwiftUI Hosting Layer**: Replaces the AppKit `UMTableView` and its single `BBAERecordCell` containing a nested list of custom cell row controllers. In `loaded()`, the storyboard-loaded views are removed and a native `BBAERecordView` is embedded via `NSHostingView`. The unused legacy subviews and table cell controllers are stubbed out to keep compilation clean.
+2. **Dynamic Fields Editor**: Inside the scroll view, record field values (`BBAERecordFieldValue`) are loaded dynamically, grouped under `UMUISection` and styled with `UMUIBoxView`:
+   - **Record ID**: A text field with an auto-suggest helper button.
+   - **Text & Long Text**: Single-line text input fields using `UMUITextField` or multi-line `TextEditor` spaces, switchable via an inline `"Large Text"` toggle. Automatically detects typed newlines to expand the editor size.
+   - **Numeric Values**: Dynamically displays a standard field, a slider (`UMUISlider`), or a stepper with minus/plus buttons based on variable configuration settings. Supports ExtendScript iteration toggles (`UMUIMiniSwitch`) and frame-range overlays.
+   - **Color Fills**: A project-wide color picker selector with real-time RGB color preview badges.
+   - **Media Attachments (Image/Video/Audio/Vector AI)**: A custom drag-and-drop file target `FileDropPreview` that accepts direct `.onDrop` file URL bindings, renders automatic thumbnail/waveform previews in the background, and features Finder reveal shortcuts.
+3. **Control Action Bar**: Modernized capsule buttons (`UMUICapsuleButton`) positioned at the bottom of the pane enable immediate saving, duplication, template navigation, deletion, and rendering triggers.
+4. **State Observability**: Employs `UMDispatch` observers within the view controller linked to `"BBAERecordChanged"` notifications to trigger seamless SwiftUI re-evaluations across all editor panels when model attributes are saved or composition updates are received.
+
 
 
