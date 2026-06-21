@@ -7,33 +7,55 @@
 
 import Cocoa
 import UMOmniaFramework
+import SwiftUI
+import UMUIControls
 
-class BBAEProjectColorListVC :	UMViewController {
+class BBAEProjectColorListVC :	UMViewController, ObservableObject {
 	
 	static let storyboardId = 	"BBAEProjectColorListVC"
-//	static let storyboardName =	"STORYBOARDNAME"
 	
 	// MARK: - UI Elements
-	@IBOutlet weak var lblColorN: NSTextField!
-	@IBOutlet weak var tblList: NSTableView!
+	// Outlets made optional to support SwiftUI hosting safely
+	@IBOutlet weak var lblColorN: NSTextField?
+	@IBOutlet weak var tblList: NSTableView?
 	
 	// MARK: - Vars
 	var bbaeProject :	BBAEProject!
 	
+	@Published var colors: [BBAEProjectColor] = []
+	
 	// MARK: - Display
 	func updateColorCountlabel () {
-		lblColorN.setValue ("Project Colors Count: \(bbaeProject.colorList.count)")
+		// Count is displayed reactively in SwiftUI
 	}
 	
 	func displayData () {
-		updateColorCountlabel ()
+		colors = bbaeProject.colorList
 	}
 	
 	func registerTableCells () {
-		BBAEProjectColorListCell.register (tblList)
+		// Table cells registered natively in SwiftUI
 	}
 	
 	// MARK: - View Cycle
+	override func viewDidLoad() {
+		super.viewDidLoad()
+		
+		let colorListView = BBAEProjectColorListView(vc: self)
+		let hostingView = NSHostingView(rootView: colorListView)
+		hostingView.translatesAutoresizingMaskIntoConstraints = false
+		
+		self.view.subviews.forEach { $0.removeFromSuperview() }
+		self.view.addSubview(hostingView)
+		
+		NSLayoutConstraint.activate([
+			hostingView.topAnchor.constraint(equalTo: self.view.topAnchor),
+			hostingView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+			hostingView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+			hostingView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
+		])
+	}
+	
 	override func willAppear () {
 		displayData ()
 	}
@@ -46,7 +68,6 @@ class BBAEProjectColorListVC :	UMViewController {
 	static func showSheet (currentController :	NSViewController,
 						   bbaeProject :		BBAEProject) {
 		_ = UMWindows.sheet (Self.storyboardId,
-//							 Self.storyboardName,
 							 currentViewController: currentController,
 							 disableResize: true) { vc in
 			guard let vc = vc as? Self else { return }
@@ -72,17 +93,19 @@ class BBAEProjectColorListVC :	UMViewController {
 	}
 	
 	// MARK: - Actions
-	@IBAction func btnAddPressed (_ sender: Any) {
+	func addColor() {
 		let newColor = BBAEProjectColor (name: "New Color",
 										 color: UMColor (0, 0, 0))
 		bbaeProject.colorList.append (newColor)
 		bbaeProject.notifyUpdate ()
-		tblList.reloadData ()
-		updateColorCountlabel ()
+		displayData()
+	}
+	
+	@IBAction func btnAddPressed (_ sender: Any) {
+		addColor()
 	}
 	
 	@IBAction func btnOkPressed (_ sender: Any) {
-//		ACTION
 		close ()
 	}
 	
@@ -96,31 +119,167 @@ extension BBAEProjectColorListVC :	BBAEProjectColorListCellDelegate {
 	func removeColor (bbaeColor :	BBAEProjectColor) {
 		bbaeProject.colorList = bbaeProject.colorList.filter { $0.id != bbaeColor.id }
 		bbaeProject.notifyUpdate ()
-		updateColorCountlabel ()
-		tblList.reloadDataInMainThread ()
+		displayData()
 	}
 }
 
-// MARK: - Table
-extension BBAEProjectColorListVC : NSTableViewDelegate, NSTableViewDataSource {
+// MARK: - SwiftUI Views
+
+struct BBAEProjectColorListView: View {
+	@ObservedObject var vc: BBAEProjectColorListVC
 	
-	func numberOfRows (in tableView: NSTableView) -> Int {
-		bbaeProject.colorList.count
+	var body: some View {
+		VStack(spacing: 0) {
+			// Header bar with title and Add button
+			HStack {
+				Text("Project Colors (\(vc.colors.count))")
+					.font(.headline)
+					.foregroundColor(.primary)
+				
+				Spacer()
+				
+				UMUICapsuleButton(systemImage: "plus", style: .accent, size: .small) {
+					vc.addColor()
+				}
+				.frame(width: 28)
+				.lineLimit(1)
+				.fixedSize()
+			}
+			.padding(.horizontal, 16)
+			.padding(.top, 16)
+			.padding(.bottom, 12)
+			
+			// Color cards list
+			ScrollView {
+				LazyVStack(spacing: 8) {
+					ForEach(vc.colors, id: \.id) { colorItem in
+						ColorListRow(colorItem: colorItem, bbaeProject: vc.bbaeProject, vc: vc)
+					}
+				}
+				.padding(.horizontal, 16)
+				.padding(.vertical, 8)
+			}
+			.background(Color.darkGray.opacity(0.05))
+			
+			UMUIVSpacer(8)
+			
+			// Footer close button
+			HStack {
+				Spacer()
+				UMUICapsuleButton("OK", style: .accent, size: .small) {
+					vc.close()
+				}
+				.frame(width: 80)
+				.lineLimit(1)
+				.fixedSize()
+				Spacer()
+			}
+			.padding(.bottom, 14)
+		}
+		.frame(minWidth: 500, minHeight: 320)
 	}
-	
-	func tableView (_ tableView: NSTableView,
-					viewFor tableColumn: NSTableColumn?,
-					row: Int) -> NSView? {
-		let cell = BBAEProjectColorListCell.getCell (tableView,
-													 bbaeProject: bbaeProject,
-													 bbaeColor: bbaeProject.colorList [row],
-													 delegate: self)
-		return cell
-	}
-	
-//	func tableViewSelectionDidChange (_ notification: Notification) {
-//		let table = notification.object as! NSTableView
-//		let selectedRow = table.selectedRow
-//	}
 }
 
+struct ColorListRow: View {
+	let colorItem: BBAEProjectColor
+	let bbaeProject: BBAEProject
+	let vc: BBAEProjectColorListVC
+	
+	@State private var colorName: String
+	@State private var colorVal: Color
+	
+	init(colorItem: BBAEProjectColor, bbaeProject: BBAEProject, vc: BBAEProjectColorListVC) {
+		self.colorItem = colorItem
+		self.bbaeProject = bbaeProject
+		self.vc = vc
+		_colorName = State(initialValue: colorItem.name)
+		_colorVal = State(initialValue: Color(nsColor: colorItem.color.getColor()))
+	}
+	
+	var body: some View {
+		HStack(spacing: 8) {
+			// Color Name Field
+			UMUITextField(
+				placeholder: "Color Name",
+				value: Binding(
+					get: { colorName },
+					set: { val in
+						colorName = val
+						colorItem.name = val
+						bbaeProject.saveColorFile(customAEProjectUrl: nil)
+						bbaeProject.save()
+					}
+				),
+				size: .small,
+				labelWidth: 0
+			)
+			.frame(width: 140)
+			
+			// Color Picker well
+			ColorPicker("", selection: Binding(
+				get: { colorVal },
+				set: { val in
+					colorVal = val
+					colorItem.color = UMColor(val.nsColor)
+					bbaeProject.saveColorFile(customAEProjectUrl: nil)
+					bbaeProject.save()
+				}
+			))
+			.labelsHidden()
+			.frame(width: 40)
+			
+			Spacer()
+			
+			// Copy HEX
+			UMUICapsuleButton("HEX", style: .gray, size: .small) {
+				UMPasteboard.setString(colorItem.hex)
+			}
+			.lineLimit(1)
+			.fixedSize()
+			
+			// Copy AE Expression Code
+			UMUICapsuleButton("AE Code", style: .gray, size: .small) {
+				bbaeProject.saveColorFile(customAEProjectUrl: nil)
+				let code = BBAESettings.shared.getColorAECodeString(color: colorItem)
+				UMPasteboard.setString(code)
+				UMShowNotification(title: "Copied", informativeText: "Color \(colorItem.name) Successfully Copied.")
+			}
+			.lineLimit(1)
+			.fixedSize()
+			
+			// Copy AE Color Fill
+			UMUICapsuleButton("Fill", style: .gray, size: .small) {
+				bbaeProject.saveColorFile(customAEProjectUrl: nil)
+				let code = BBAESettings.shared.getColorFillString(color: colorItem)
+				UMPasteboard.setString(code)
+				UMShowNotification(title: "Copied", informativeText: "Color \(colorItem.name) Successfully Copied.")
+			}
+			.lineLimit(1)
+			.fixedSize()
+			
+			// Remove Button
+			UMUICapsuleButton(systemImage: "trash", style: .gray, size: .small) {
+				vc.removeColor(bbaeColor: colorItem)
+			}
+			.lineLimit(1)
+			.fixedSize()
+		}
+		.padding(6)
+		.background(UMUIBoxView(cornerRadius: 6, borderWidth: 1, backColor: Color.boxGray.opacity(0.15), foreColor: Color.gray.opacity(0.2)))
+	}
+}
+
+// MARK: - Color Conversion Helpers
+
+extension Color {
+	var nsColor: NSColor {
+		if #available(macOS 12.0, *) {
+			return NSColor(self)
+		} else {
+			if let cgColor = self.cgColor {
+				return NSColor(cgColor: cgColor) ?? .white
+			}
+			return .white
+		}
+	}
+}

@@ -334,4 +334,16 @@ The global settings panel (`BBAESettingsVC`) is refactored from a multi-controll
    - **Caches Tab**: Introduces custom drag-and-drop file/folder drop zones (`CacheDropZone`) matching `.onDrop` handlers with native AppKit folder picking triggers via `UMFileDialogs.chooseFolder`.
 4. **State Observability**: Incorporates a shared local notification `"BBAESettingsChanged"` triggered automatically inside `BBAESettings.save()`. This ensures the SwiftUI views dynamically reload lists and options upon returning from sub-sheet selections.
 
+### BBAEProjectColorListVC Unified Architecture
+
+The project colors manager (`BBAEProjectColorListVC`) is modernized into a unified, responsive SwiftUI color organizer:
+1. **SwiftUI Hosting Layer**: In `viewDidLoad`, all storyboard-loaded views (labels, scroll/table views, and buttons) are removed, and a SwiftUI root view `BBAEProjectColorListView` is loaded dynamically via `NSHostingView`.
+2. **Observation Model**: Conforms `BBAEProjectColorListVC` to `ObservableObject`, tracking the color list via a `@Published var colors` property. Adding or removing a color automatically re-publishes the list, updating the UI reactively.
+3. **Card-Based Row Layout**: Each color is managed by a `ColorListRow` view wrapped inside a `UMUIBoxView` border for a premium card aesthetic:
+   - `UMUITextField` for inline editing of the color's name.
+   - SwiftUI's native `ColorPicker` for choosing arbitrary RGB colors, converting values to `UMColor` on change.
+   - Actions to copy `HEX`, `AE Code` variables, and color `Fill` code utilizing `UMUICapsuleButton` styled as `.gray` size `.small`.
+   - Single-line layout constraints (`.lineLimit(1)` and `.fixedSize()`) are enforced on all buttons.
+
+
 
