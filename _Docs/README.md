@@ -323,4 +323,15 @@ The composition template manager (`BBAETemplateListVC`) implements a highly func
 3. **Menu Integration**: Replaced standard context menus with a native, inline SwiftUI `Menu` offering options to append new variables and dynamic fields (Text, Color Fill, Image, Video, Checkbox, etc.) to the composition.
 4. **Layout Protection**: Strict line-limit configurations (`.lineLimit(1)`) and `.fixedSize(horizontal: true, vertical: false)` prevent button labels from wrapping or splitting under constrained widths.
 
+### BBAESettingsVC Unified Architecture
+
+The global settings panel (`BBAESettingsVC`) is refactored from a multi-controller, storyboard-loaded tab setup into a unified SwiftUI interface:
+1. **SwiftUI Hosting Layer**: In `viewDidLoad`, all storyboard subviews are purged, and `BBAESettingsView` is hosted directly using `NSHostingView`. The legacy subview controllers (`BBAESettingsVCGeneral`, `BBAESettingsVCRendering`, `BBAESettingsVCCaches`) are stubbed out to keep the workspace targets clean.
+2. **Tabbed Layout**: Replaces the storyboard's `UMTabView` with a `UMUISegmentedBar` at the top of the interface. Subviews are dynamically swapped via a central `switch` selection, bounded within cards using `UMUIBoxView` and `UMUISection`.
+3. **Advanced Integration**:
+   - **General Tab**: Utilizes `UMUIMiniSwitch` for launch preferences, `UMUITextField` for carriage return settings, and `UMUISlider` for poster frame offsets.
+   - **Rendering Tab**: Features a warning indicator for missing `aerender` binaries, popover pickers for default settings/outputs, and shortcuts using `UMUICapsuleButton` to pop AppKit-based modal editing sheets (`BBAERenderOutputListVC`).
+   - **Caches Tab**: Introduces custom drag-and-drop file/folder drop zones (`CacheDropZone`) matching `.onDrop` handlers with native AppKit folder picking triggers via `UMFileDialogs.chooseFolder`.
+4. **State Observability**: Incorporates a shared local notification `"BBAESettingsChanged"` triggered automatically inside `BBAESettings.save()`. This ensures the SwiftUI views dynamically reload lists and options upon returning from sub-sheet selections.
+
 

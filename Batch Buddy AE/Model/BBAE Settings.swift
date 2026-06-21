@@ -173,6 +173,7 @@ class BBAESettings :	Codable {
 		let s = JU.encodeToString (self)
 		UMPrefsStorage.setValueString (key: Self.kDefaultKey,
 							  value: s)
+		NotificationCenter.default.post(name: NSNotification.Name("BBAESettingsChanged"), object: nil)
 	}
 	
 	func getLayerColorToBePasted (index idx :	Int) -> String {
