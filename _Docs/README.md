@@ -371,5 +371,15 @@ The template instance record editor window (`BBAERecordVC`) has been refactored 
 3. **Control Action Bar**: Modernized capsule buttons (`UMUICapsuleButton`) positioned at the bottom of the pane enable immediate saving, duplication, template navigation, deletion, and rendering triggers.
 4. **State Observability**: Employs `UMDispatch` observers within the view controller linked to `"BBAERecordChanged"` notifications to trigger seamless SwiftUI re-evaluations across all editor panels when model attributes are saved or composition updates are received.
 
+### BBAEProjectTemplateListVC Unified Architecture
+
+The project compositions template selector panel (`BBAEProjectTemplateListVC`) is refactored into a unified SwiftUI list interface:
+1. **SwiftUI Hosting Layer**: In `loaded()`, all legacy storyboard views are removed, and a native `BBAEProjectTemplateListView` is loaded dynamically via `NSHostingView`. The legacy `BBAEProjectTemplateListCell` AppKit cell wrapper is stubbed out.
+2. **Interactive Template Cards**: Displays compositions inside modern cards (`UMUIBoxView` and `UMUISection` layout):
+   - `UMUITextField` for editing Composition Name and Short Name.
+   - Dynamic `Picker` to assign default brand colors from the project's color palette.
+   - Capsule action buttons (`UMUICapsuleButton`) with `plus.on.plus` and `trash` system symbols to duplicate and remove compositions instantly.
+3. **Observation Model**: Integrates `UMDispatch` listeners to capture database alterations, pushing a `"BBAEProjectTemplatesChanged"` notification to trigger SwiftUI data updates reactively.
+
 
 
