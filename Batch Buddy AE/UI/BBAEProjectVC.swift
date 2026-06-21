@@ -546,106 +546,83 @@ struct BBAEProjectHeaderView: View {
 	@ObservedObject var vc: BBAEProjectVC
 	
 	var body: some View {
-		VStack(spacing: 8) {
-			// Row 1: Search & Filter controls
-			HStack(spacing: 10) {
-				// Search Input
-				UMUITextField(
-					placeholder: "Search...",
-					value: Binding(
-						get: { vc.searchText },
-						set: { newValue in
-							vc.searchText = newValue
-							vc.performSearch()
-						}
-					),
-					size: .small
-				)
-				.frame(width: 180)
-				
-				// Templates Filter Picker
-				Picker("", selection: Binding(
-					get: { vc.searchComp },
+		HStack(spacing: 10) {
+			// Search Input
+			UMUITextField(
+				placeholder: "Search...",
+				value: Binding(
+					get: { vc.searchText },
 					set: { newValue in
-						vc.searchComp = newValue
+						vc.searchText = newValue
 						vc.performSearch()
 					}
-				)) {
-					Text("All Comp Templates").tag("*")
-					ForEach(vc.project.compList, id: \.id) { comp in
-						Text(comp.name).tag(comp.id)
-					}
-				}
-				.pickerStyle(MenuPickerStyle())
-				.frame(width: 180)
-				
-				// Pending Only Toggle Button
-				UMUICapsuleButton(
-					style: vc.showToBeRenderedOnly ? .accent : .gray,
-					size: .small,
-					action: {
-						vc.showToBeRenderedOnly.toggle()
-						vc.updateLiveData()
-					}
-				) {
-					HStack(spacing: 4) {
-						if let nsImg = Draw.getImage(vc.showToBeRenderedOnly ? "Icon_Render_00001" : "Icon_Render_00000") {
-							Image(nsImage: nsImg)
-								.resizable()
-								.aspectRatio(contentMode: .fit)
-								.frame(width: 12, height: 12)
-						}
-						Text("Pending Only")
-							.font(.system(size: 11))
-					}
-				}
-				
-				// Compact Mode Toggle Button
-				UMUICapsuleButton(
-					vc.displayMode == .normal ? "Compact View" : "Normal View",
-					systemImage: vc.displayMode == .normal ? "square.dashed.inset.filled" : "list.bullet.rectangle",
-					style: .gray,
-					size: .small,
-					action: {
-						vc.btnCompactPressed(vc)
-					}
-				)
-				
-				Spacer()
-			}
+				),
+				size: .small
+			)
+			.frame(width: 140)
 			
-			// Row 2: Action Buttons
-			HStack(spacing: 8) {
-				UMUICapsuleButton("Add Item", systemImage: "plus", style: .gray, size: .small) {
-					vc.btnaddItemPressed(vc)
+			// Templates Filter Picker
+			Picker("", selection: Binding(
+				get: { vc.searchComp },
+				set: { newValue in
+					vc.searchComp = newValue
+					vc.performSearch()
 				}
-				
-				UMUICapsuleButton("Templates", systemImage: "doc.text", style: .gray, size: .small) {
-					vc.btnTemplates(vc)
-				}
-				
-				UMUICapsuleButton("Template Panel", systemImage: "rectangle.3.group", style: .gray, size: .small) {
-					vc.btnTemplatePanelPressed(vc)
-				}
-				
-				UMUICapsuleButton("Colors", systemImage: "paintpalette", style: .gray, size: .small) {
-					vc.btnColorsPressed(vc)
-				}
-				
-				UMUICapsuleButton("Render Folder", systemImage: "folder", style: .gray, size: .small) {
-					vc.btnRenderFolderPressed(vc)
-				}
-				
-				UMUICapsuleButton("Project Settings", systemImage: "gearshape", style: .gray, size: .small) {
-					vc.btnProjectSettingsPressed(vc)
-				}
-				
-				Spacer()
-				
-				UMUICapsuleButton("Render Comps", systemImage: "play.fill", style: .accent, size: .small) {
-					vc.btnRenderPressed(vc)
+			)) {
+				Text("All Comp Templates").tag("*")
+				ForEach(vc.project.compList, id: \.id) { comp in
+					Text(comp.name).tag(comp.id)
 				}
 			}
+			.pickerStyle(MenuPickerStyle())
+			.frame(width: 140)
+			
+			// Pending Only Toggle Button
+			UMUICapsuleButton(
+				style: vc.showToBeRenderedOnly ? .accent : .gray,
+				size: .small,
+				action: {
+					vc.showToBeRenderedOnly.toggle()
+					vc.updateLiveData()
+				}
+			) {
+				HStack(spacing: 4) {
+					if let nsImg = Draw.getImage(vc.showToBeRenderedOnly ? "Icon_Render_00001" : "Icon_Render_00000") {
+						Image(nsImage: nsImg)
+							.resizable()
+							.aspectRatio(contentMode: .fit)
+							.frame(width: 12, height: 12)
+					}
+					Text("Pending Only")
+						.font(.system(size: 11))
+						.lineLimit(1)
+				}
+			}
+			.fixedSize(horizontal: true, vertical: false)
+			
+			// Compact Mode Toggle Button
+			UMUICapsuleButton(
+				vc.displayMode == .normal ? "Compact View" : "Normal View",
+				systemImage: vc.displayMode == .normal ? "square.dashed.inset.filled" : "list.bullet.rectangle",
+				style: .gray,
+				size: .small,
+				action: {
+					vc.btnCompactPressed(vc)
+				}
+			)
+			.fixedSize(horizontal: true, vertical: false)
+			
+			UMUICapsuleButton("Templates", systemImage: "doc.text", style: .gray, size: .small) {
+				vc.btnTemplates(vc)
+			}
+			.fixedSize(horizontal: true, vertical: false)
+			
+			UMUICapsuleButton("Template Panel", systemImage: "rectangle.3.group", style: .gray, size: .small) {
+				vc.btnTemplatePanelPressed(vc)
+			}
+			.fixedSize(horizontal: true, vertical: false)
+			
+			Spacer()
 		}
 		.padding(.horizontal, 12)
 		.padding(.vertical, 8)
@@ -657,7 +634,7 @@ struct BBAEProjectFooterView: View {
 	@ObservedObject var vc: BBAEProjectVC
 	
 	var body: some View {
-		HStack {
+		HStack(spacing: 8) {
 			// Switch for Render All
 			UMUIMiniSwitch(
 				"Render All",
@@ -672,15 +649,16 @@ struct BBAEProjectFooterView: View {
 					}
 				)
 			)
+			.fixedSize(horizontal: true, vertical: false)
 			
-			UMUIHSpacer(16)
+			UMUIHSpacer(8)
 			
 			// Items count text
 			Text(vc.itemsCountText)
 				.font(.system(size: 11, weight: .medium, design: .rounded))
 				.foregroundColor(.secondary)
-			
-			Spacer()
+				.lineLimit(1)
+				.fixedSize(horizontal: true, vertical: false)
 			
 			// Status messages
 			if !vc.statusText.isEmpty {
@@ -691,7 +669,36 @@ struct BBAEProjectFooterView: View {
 					.padding(.vertical, 2)
 					.background(Color.accentColor.opacity(0.15))
 					.cornerRadius(4)
+					.lineLimit(1)
+					.fixedSize(horizontal: true, vertical: false)
 			}
+			
+			Spacer()
+			
+			UMUICapsuleButton("Add Item", systemImage: "plus", style: .gray, size: .small) {
+				vc.btnaddItemPressed(vc)
+			}
+			.fixedSize(horizontal: true, vertical: false)
+			
+			UMUICapsuleButton("Colors", systemImage: "paintpalette", style: .gray, size: .small) {
+				vc.btnColorsPressed(vc)
+			}
+			.fixedSize(horizontal: true, vertical: false)
+			
+			UMUICapsuleButton("Render Folder", systemImage: "folder", style: .gray, size: .small) {
+				vc.btnRenderFolderPressed(vc)
+			}
+			.fixedSize(horizontal: true, vertical: false)
+			
+			UMUICapsuleButton("Project Settings", systemImage: "gearshape", style: .gray, size: .small) {
+				vc.btnProjectSettingsPressed(vc)
+			}
+			.fixedSize(horizontal: true, vertical: false)
+			
+			UMUICapsuleButton("Render Comps", systemImage: "play.fill", style: .accent, size: .small) {
+				vc.btnRenderPressed(vc)
+			}
+			.fixedSize(horizontal: true, vertical: false)
 		}
 		.padding(.horizontal, 12)
 		.padding(.vertical, 6)
