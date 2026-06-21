@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19455" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19455"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner"/>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView identifier="BBAETemplateStructureImageAndVideoCell" id="c22-O7-iKe" customClass="BBAETemplateStructureImageAndVideoCell" customModule="Batch_Buddy_AE" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="420" height="99"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <button translatesAutoresizingMaskIntoConstraints="NO" id="Zyk-vH-VnM">
+                    <rect key="frame" x="384" y="42" width="16" height="16"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="16" id="DKv-O1-3sF"/>
+                        <constraint firstAttribute="width" constant="16" id="gxo-Sg-gBX"/>
+                    </constraints>
+                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Icon_Remove (0-00-00-00)" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="OzJ-c3-Glg">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="btnRemovePressed:" target="c22-O7-iKe" id="4mv-DR-On0"/>
+                    </connections>
+                </button>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="2tZ-mI-Wmm">
+                    <rect key="frame" x="44" y="77" width="68" height="14"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="64" id="IBQ-b6-1MW"/>
+                    </constraints>
+                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Field Name:" id="5Sv-hQ-SGm">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9vA-Wj-N6N" customClass="UMTextField" customModule="UMOmniaFramework">
+                    <rect key="frame" x="120" y="74" width="246" height="21"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="Field Name" drawsBackground="YES" id="Ju8-5X-lpU">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="ttG-Yz-qGd">
+                    <rect key="frame" x="44" y="28" width="70" height="14"/>
+                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Placeholder:" id="1H8-hm-ful">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <button translatesAutoresizingMaskIntoConstraints="NO" id="19N-J0-dv0">
+                    <rect key="frame" x="324" y="27" width="16" height="16"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="16" id="D1r-Ki-XM6"/>
+                        <constraint firstAttribute="width" constant="16" id="Xml-82-A7d"/>
+                    </constraints>
+                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Icon_Copy (0-00-00-00)" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="BsI-1r-EGP">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="btnCopyPlaceholderUrlPressed:" target="c22-O7-iKe" id="5An-Is-8No"/>
+                    </connections>
+                </button>
+                <button translatesAutoresizingMaskIntoConstraints="NO" id="jDc-MO-3V9">
+                    <rect key="frame" x="350" y="27" width="16" height="16"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="16" id="TYU-6j-67J"/>
+                        <constraint firstAttribute="height" constant="16" id="s0T-mm-9tG"/>
+                    </constraints>
+                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Btn__Show-in-Finder_00000" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="VEi-7W-teQ">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="btnshowPlaceholderInFinderPressed:" target="c22-O7-iKe" id="Cis-Gk-vvi"/>
+                    </connections>
+                </button>
+                <customView translatesAutoresizingMaskIntoConstraints="NO" id="8s3-J0-8eZ" customClass="UMDragArea" customModule="UMOmniaFramework">
+                    <rect key="frame" x="120" y="0.0" width="194" height="70"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="70" id="FC9-sI-IaM"/>
+                    </constraints>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="image" keyPath="backdropImage" value="BBAE_CheckerBoard (0-00-00-00)"/>
+                        <userDefinedRuntimeAttribute type="number" keyPath="radius">
+                            <real key="value" value="6"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="color" keyPath="color">
+                            <color key="value" red="0.90835733890000003" green="0.90835733890000003" blue="0.90835733890000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="fill" value="NO"/>
+                        <userDefinedRuntimeAttribute type="number" keyPath="border">
+                            <real key="value" value="1"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </customView>
+                <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Hgt-WS-a1d">
+                    <rect key="frame" x="10" y="76" width="16" height="16"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="16" id="ADj-vW-Nmo"/>
+                        <constraint firstAttribute="height" constant="16" id="bE6-3w-Rkj"/>
+                    </constraints>
+                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="Btn__Type-Text_00000" id="Qxr-Zq-97Z"/>
+                </imageView>
+            </subviews>
+            <constraints>
+                <constraint firstItem="ttG-Yz-qGd" firstAttribute="leading" secondItem="2tZ-mI-Wmm" secondAttribute="leading" id="2ka-Jn-FNe"/>
+                <constraint firstItem="Hgt-WS-a1d" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" constant="10" id="3Lj-lr-ohZ"/>
+                <constraint firstItem="2tZ-mI-Wmm" firstAttribute="leading" secondItem="Hgt-WS-a1d" secondAttribute="trailing" constant="20" id="5n0-wu-sj8"/>
+                <constraint firstItem="ttG-Yz-qGd" firstAttribute="centerY" secondItem="8s3-J0-8eZ" secondAttribute="centerY" id="61H-yV-f3W"/>
+                <constraint firstItem="2tZ-mI-Wmm" firstAttribute="firstBaseline" secondItem="9vA-Wj-N6N" secondAttribute="firstBaseline" id="ARK-RG-Klt"/>
+                <constraint firstItem="19N-J0-dv0" firstAttribute="centerY" secondItem="8s3-J0-8eZ" secondAttribute="centerY" id="CHX-Hs-fCL"/>
+                <constraint firstItem="2tZ-mI-Wmm" firstAttribute="centerY" secondItem="Hgt-WS-a1d" secondAttribute="centerY" id="Ec5-ON-I5k"/>
+                <constraint firstItem="jDc-MO-3V9" firstAttribute="centerY" secondItem="19N-J0-dv0" secondAttribute="centerY" id="Emg-wu-x7d"/>
+                <constraint firstItem="8s3-J0-8eZ" firstAttribute="top" secondItem="9vA-Wj-N6N" secondAttribute="bottom" constant="4" id="Hts-Wj-LY5"/>
+                <constraint firstItem="jDc-MO-3V9" firstAttribute="leading" secondItem="19N-J0-dv0" secondAttribute="trailing" constant="10" id="JPg-10-GSI"/>
+                <constraint firstItem="19N-J0-dv0" firstAttribute="leading" secondItem="8s3-J0-8eZ" secondAttribute="trailing" constant="10" id="b6g-Ys-p2U"/>
+                <constraint firstItem="Hgt-WS-a1d" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" constant="7" id="bXo-FE-PXP"/>
+                <constraint firstItem="jDc-MO-3V9" firstAttribute="trailing" secondItem="9vA-Wj-N6N" secondAttribute="trailing" id="dQW-K8-Z9A"/>
+                <constraint firstItem="9vA-Wj-N6N" firstAttribute="leading" secondItem="2tZ-mI-Wmm" secondAttribute="trailing" constant="10" id="haW-wD-TAi"/>
+                <constraint firstAttribute="trailing" secondItem="9vA-Wj-N6N" secondAttribute="trailing" constant="54" id="iuF-LK-1zs"/>
+                <constraint firstItem="Zyk-vH-VnM" firstAttribute="centerY" secondItem="c22-O7-iKe" secondAttribute="centerY" id="j1y-xF-XpE"/>
+                <constraint firstAttribute="trailing" secondItem="Zyk-vH-VnM" secondAttribute="trailing" constant="20" id="ktT-r4-VLM"/>
+                <constraint firstItem="8s3-J0-8eZ" firstAttribute="leading" secondItem="9vA-Wj-N6N" secondAttribute="leading" id="yNk-Jg-2FC"/>
+            </constraints>
+            <connections>
+                <outlet property="drgPlaceholder" destination="8s3-J0-8eZ" id="NqH-rw-f7z"/>
+                <outlet property="fldFieldName" destination="9vA-Wj-N6N" id="Qmh-Nn-bO3"/>
+                <outlet property="imgFieldType" destination="Hgt-WS-a1d" id="Gg3-Rm-zq4"/>
+            </connections>
+            <point key="canvasLocation" x="67" y="76.5"/>
+        </customView>
+    </objects>
+    <resources>
+        <image name="BBAE_CheckerBoard (0-00-00-00)" width="360" height="150"/>
+        <image name="Btn__Show-in-Finder_00000" width="64" height="64"/>
+        <image name="Btn__Type-Text_00000" width="64" height="64"/>
+        <image name="Icon_Copy (0-00-00-00)" width="64" height="64"/>
+        <image name="Icon_Remove (0-00-00-00)" width="64" height="64"/>
+    </resources>
+</document>

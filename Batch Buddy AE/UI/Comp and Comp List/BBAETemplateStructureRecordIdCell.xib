@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19455" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19455"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner"/>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView identifier="BBAETemplateStructureRecordIdCell" id="nud-OQ-4Mt" customClass="BBAETemplateStructureRecordIdCell" customModule="Batch_Buddy_AE" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="420" height="28"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <button translatesAutoresizingMaskIntoConstraints="NO" id="mej-W2-LOd">
+                    <rect key="frame" x="384" y="6" width="16" height="16"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="16" id="L2K-A0-180"/>
+                        <constraint firstAttribute="width" constant="16" id="SV3-hZ-DnL"/>
+                    </constraints>
+                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Icon_Remove (0-00-00-00)" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="oat-jQ-VdV">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="btnRemovePressed:" target="nud-OQ-4Mt" id="ryX-NR-lpV"/>
+                    </connections>
+                </button>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="7wo-oW-9GL">
+                    <rect key="frame" x="44" y="6" width="68" height="14"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="64" id="usB-k9-EkF"/>
+                    </constraints>
+                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Record ID" id="xLB-PC-gJv">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Qan-hN-FN6">
+                    <rect key="frame" x="10" y="5" width="16" height="16"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="16" id="2wc-IO-Gf4"/>
+                        <constraint firstAttribute="height" constant="16" id="UvU-VT-95a"/>
+                    </constraints>
+                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="Btn__Id_00000" id="tLk-sf-U7d"/>
+                </imageView>
+            </subviews>
+            <constraints>
+                <constraint firstItem="7wo-oW-9GL" firstAttribute="leading" secondItem="Qan-hN-FN6" secondAttribute="trailing" constant="20" id="4UV-AN-EDn"/>
+                <constraint firstItem="Qan-hN-FN6" firstAttribute="top" secondItem="nud-OQ-4Mt" secondAttribute="top" constant="7" id="JE2-cq-YVW"/>
+                <constraint firstItem="Qan-hN-FN6" firstAttribute="leading" secondItem="nud-OQ-4Mt" secondAttribute="leading" constant="10" id="Zvy-ex-Qar"/>
+                <constraint firstItem="7wo-oW-9GL" firstAttribute="centerY" secondItem="Qan-hN-FN6" secondAttribute="centerY" id="dCy-Oo-ihG"/>
+                <constraint firstItem="mej-W2-LOd" firstAttribute="centerY" secondItem="nud-OQ-4Mt" secondAttribute="centerY" id="gga-Di-Gse"/>
+                <constraint firstAttribute="trailing" secondItem="mej-W2-LOd" secondAttribute="trailing" constant="20" symbolic="YES" id="opI-ck-mk6"/>
+            </constraints>
+            <point key="canvasLocation" x="-2" y="180"/>
+        </customView>
+    </objects>
+    <resources>
+        <image name="Btn__Id_00000" width="64" height="64"/>
+        <image name="Icon_Remove (0-00-00-00)" width="64" height="64"/>
+    </resources>
+</document>

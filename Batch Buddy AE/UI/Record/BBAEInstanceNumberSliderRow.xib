@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21701"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner"/>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView identifier="BBAEInstanceNumberSliderRow" id="c22-O7-iKe" customClass="BBAEInstanceNumberSliderRow" customModule="Batch_Buddy_AE" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="477" height="35"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="P5p-5C-8lt">
+                    <rect key="frame" x="34" y="11" width="100" height="14"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="96" id="LJC-bb-ZRM"/>
+                    </constraints>
+                    <textFieldCell key="cell" lineBreakMode="clipping" title="Field Name:" id="tq3-9B-OnR">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="MPX-xt-wZY">
+                    <rect key="frame" x="10" y="10" width="16" height="16"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="16" id="71K-4k-Fwf"/>
+                        <constraint firstAttribute="width" constant="16" id="WdM-00-c4Q"/>
+                    </constraints>
+                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="Btn__Type-Number_00000" id="5UU-cj-yNe"/>
+                </imageView>
+                <slider verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0UA-ab-4He" customClass="UMSlider" customModule="UMOmniaFramework">
+                    <rect key="frame" x="138" y="2" width="286" height="28"/>
+                    <sliderCell key="cell" continuous="YES" state="on" alignment="left" maxValue="100" doubleValue="50" tickMarkPosition="above" sliderType="linear" id="CHx-qD-s7N"/>
+                </slider>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fuT-KJ-Ul2">
+                    <rect key="frame" x="426" y="11" width="48" height="14"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="44" id="5GV-eE-OLm"/>
+                    </constraints>
+                    <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="0000.0" id="s51-Fc-Xbb">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+            </subviews>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="fuT-KJ-Ul2" secondAttribute="trailing" constant="5" id="1oo-m7-pnG"/>
+                <constraint firstItem="MPX-xt-wZY" firstAttribute="centerY" secondItem="c22-O7-iKe" secondAttribute="centerY" id="3HF-B6-waQ"/>
+                <constraint firstItem="MPX-xt-wZY" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" constant="10" id="Lnp-CM-ip6"/>
+                <constraint firstItem="fuT-KJ-Ul2" firstAttribute="leading" secondItem="0UA-ab-4He" secondAttribute="trailing" constant="6" id="WOn-Zd-h1W"/>
+                <constraint firstItem="fuT-KJ-Ul2" firstAttribute="centerY" secondItem="0UA-ab-4He" secondAttribute="centerY" id="ZpR-7x-Dhg"/>
+                <constraint firstItem="fuT-KJ-Ul2" firstAttribute="firstBaseline" secondItem="P5p-5C-8lt" secondAttribute="firstBaseline" id="hn3-Zd-nsX"/>
+                <constraint firstItem="0UA-ab-4He" firstAttribute="leading" secondItem="P5p-5C-8lt" secondAttribute="trailing" constant="8" symbolic="YES" id="q1G-f2-r0M"/>
+                <constraint firstItem="P5p-5C-8lt" firstAttribute="leading" secondItem="MPX-xt-wZY" secondAttribute="trailing" constant="10" id="q8R-7I-JdI"/>
+                <constraint firstItem="P5p-5C-8lt" firstAttribute="centerY" secondItem="0UA-ab-4He" secondAttribute="centerY" id="qAB-6L-P9W"/>
+                <constraint firstItem="0UA-ab-4He" firstAttribute="centerY" secondItem="c22-O7-iKe" secondAttribute="centerY" id="x5O-ec-Zn6"/>
+            </constraints>
+            <connections>
+                <outlet property="lblFieldName" destination="P5p-5C-8lt" id="D7e-YV-wV7"/>
+                <outlet property="lblValue" destination="fuT-KJ-Ul2" id="TsE-i4-h2b"/>
+                <outlet property="sldValue" destination="0UA-ab-4He" id="cow-sq-g8y"/>
+            </connections>
+            <point key="canvasLocation" x="137.5" y="3.5"/>
+        </customView>
+    </objects>
+    <resources>
+        <image name="Btn__Type-Number_00000" width="64" height="64"/>
+    </resources>
+</document>

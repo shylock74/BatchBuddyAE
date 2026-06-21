@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <FileRef
+      location = "container:Batch Buddy AE.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:../UMMovie/UMMovie.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:../UMOmniaFramework/UMOmniaFramework.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:../UMMIH/UMMIH.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "container:../FPH/FPH.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "container:../UMImage/UMImaging.xcodeproj">
+   </FileRef>
+</Workspace>

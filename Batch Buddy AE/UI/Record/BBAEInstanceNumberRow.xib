@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21507" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21507"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner"/>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView identifier="BBAEInstanceNumberRow" id="TBB-of-M40" customClass="BBAEInstanceNumberRow" customModule="Batch_Buddy_AE" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="480" height="28"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="nXS-qX-kLk">
+                    <rect key="frame" x="34" y="7" width="100" height="14"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="96" id="Kfj-Nw-owC"/>
+                    </constraints>
+                    <textFieldCell key="cell" lineBreakMode="clipping" title="Field Name:" id="9GM-5q-VKg">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Y5y-IO-2rf" customClass="UMTextField" customModule="UMOmniaFramework">
+                    <rect key="frame" x="142" y="4" width="100" height="21"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="100" id="fLm-Ja-Aub"/>
+                    </constraints>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" alignment="right" drawsBackground="YES" id="qFp-H3-xLM">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Q5H-LQ-RVu">
+                    <rect key="frame" x="10" y="6" width="16" height="16"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="16" id="3TX-SY-5kK"/>
+                        <constraint firstAttribute="width" constant="16" id="cwU-8M-u90"/>
+                    </constraints>
+                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="Btn__Type-Number_00000" id="OBl-rn-tVS"/>
+                </imageView>
+            </subviews>
+            <constraints>
+                <constraint firstItem="Q5H-LQ-RVu" firstAttribute="leading" secondItem="TBB-of-M40" secondAttribute="leading" constant="10" id="UfG-RZ-28D"/>
+                <constraint firstItem="nXS-qX-kLk" firstAttribute="firstBaseline" secondItem="Y5y-IO-2rf" secondAttribute="firstBaseline" id="b1e-9B-Jto"/>
+                <constraint firstItem="nXS-qX-kLk" firstAttribute="leading" secondItem="Q5H-LQ-RVu" secondAttribute="trailing" constant="10" id="f8U-4Q-OB6"/>
+                <constraint firstItem="Q5H-LQ-RVu" firstAttribute="centerY" secondItem="TBB-of-M40" secondAttribute="centerY" id="p1g-nJ-1JC"/>
+                <constraint firstItem="Y5y-IO-2rf" firstAttribute="centerY" secondItem="TBB-of-M40" secondAttribute="centerY" id="rTJ-9M-GgU"/>
+                <constraint firstItem="Y5y-IO-2rf" firstAttribute="leading" secondItem="nXS-qX-kLk" secondAttribute="trailing" constant="8" symbolic="YES" id="sGE-JC-s3P"/>
+            </constraints>
+            <connections>
+                <outlet property="fldText" destination="Y5y-IO-2rf" id="0Ed-HC-exY"/>
+                <outlet property="lblFieldName" destination="nXS-qX-kLk" id="T6m-5l-HCg"/>
+            </connections>
+            <point key="canvasLocation" x="72" y="120"/>
+        </customView>
+    </objects>
+    <resources>
+        <image name="Btn__Type-Number_00000" width="64" height="64"/>
+    </resources>
+</document>

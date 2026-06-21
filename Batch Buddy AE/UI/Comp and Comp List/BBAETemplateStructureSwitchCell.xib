@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19455" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19455"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner"/>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView identifier="BBAETemplateStructureSwitchCell" id="aMt-vJ-eGL" customClass="BBAETemplateStructureSwitchCell" customModule="Batch_Buddy_AE" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="420" height="50"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <button translatesAutoresizingMaskIntoConstraints="NO" id="yEh-qn-KuJ">
+                    <rect key="frame" x="384" y="17" width="16" height="16"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="16" id="hru-6H-mCE"/>
+                        <constraint firstAttribute="width" constant="16" id="nID-I1-Chk"/>
+                    </constraints>
+                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Icon_Remove (0-00-00-00)" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="APi-cQ-AOd">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="btnRemovePressed:" target="aMt-vJ-eGL" id="rUX-Xh-saP"/>
+                    </connections>
+                </button>
+                <button translatesAutoresizingMaskIntoConstraints="NO" id="max-Gz-CdT">
+                    <rect key="frame" x="322" y="28" width="16" height="16"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="16" id="JtK-X1-dqe"/>
+                        <constraint firstAttribute="width" constant="16" id="S4U-40-Lct"/>
+                    </constraints>
+                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Icon_Copy (0-00-00-00)" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="5J2-cn-dSA">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="btnCopyCodePressed:" target="aMt-vJ-eGL" id="KcL-q1-eSq"/>
+                    </connections>
+                </button>
+                <button translatesAutoresizingMaskIntoConstraints="NO" id="qIo-o7-wdx">
+                    <rect key="frame" x="348" y="28" width="16" height="16"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="16" id="8rN-wH-PwC"/>
+                        <constraint firstAttribute="height" constant="16" id="m1G-qJ-s8C"/>
+                    </constraints>
+                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Btn__Visibility-Code_00000" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="6YG-Aq-cLh">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="btnCopyVisibilityCodePressed:" target="aMt-vJ-eGL" id="2gT-bS-WSU"/>
+                    </connections>
+                </button>
+                <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jyj-rL-bdF" customClass="UMTextField" customModule="UMOmniaFramework">
+                    <rect key="frame" x="120" y="25" width="194" height="21"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="Field Name" drawsBackground="YES" id="8FL-tZ-O0r">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <action selector="fldFieldNameChanged:" target="aMt-vJ-eGL" id="WvW-RH-SNR"/>
+                    </connections>
+                </textField>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="HQl-qv-p5N">
+                    <rect key="frame" x="44" y="4" width="68" height="14"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="64" id="HyI-D6-rEC"/>
+                    </constraints>
+                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Default:" id="Ivp-Pp-WSh">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2Y3-Wy-Js5" customClass="UMCheckButton" customModule="UMOmniaFramework">
+                    <rect key="frame" x="118" y="2" width="42" height="18"/>
+                    <buttonCell key="cell" type="check" title="On" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="HWp-a5-02O">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                </button>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="ybN-pk-lWr">
+                    <rect key="frame" x="44" y="28" width="68" height="14"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="64" id="x2F-1u-bP8"/>
+                    </constraints>
+                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Field Name:" id="6zT-jy-zSP">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="QNb-Ze-DdB">
+                    <rect key="frame" x="10" y="27" width="16" height="16"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="16" id="fqp-nv-Wut"/>
+                        <constraint firstAttribute="width" constant="16" id="kGr-eG-Osr"/>
+                    </constraints>
+                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="Btn__Type-Checkbox_00000" id="my6-iT-5Ka"/>
+                </imageView>
+            </subviews>
+            <constraints>
+                <constraint firstItem="ybN-pk-lWr" firstAttribute="leading" secondItem="QNb-Ze-DdB" secondAttribute="trailing" constant="20" id="0aB-yt-Cu5"/>
+                <constraint firstItem="2Y3-Wy-Js5" firstAttribute="centerY" secondItem="HQl-qv-p5N" secondAttribute="centerY" id="24i-GX-sdh"/>
+                <constraint firstItem="ybN-pk-lWr" firstAttribute="firstBaseline" secondItem="jyj-rL-bdF" secondAttribute="firstBaseline" id="9qb-8z-jpq"/>
+                <constraint firstItem="ybN-pk-lWr" firstAttribute="centerY" secondItem="QNb-Ze-DdB" secondAttribute="centerY" id="EbE-Ho-DCX"/>
+                <constraint firstItem="2Y3-Wy-Js5" firstAttribute="leading" secondItem="jyj-rL-bdF" secondAttribute="leading" id="Kqy-j5-9Bx"/>
+                <constraint firstItem="jyj-rL-bdF" firstAttribute="leading" secondItem="ybN-pk-lWr" secondAttribute="trailing" constant="10" id="PKq-ID-jn4"/>
+                <constraint firstItem="QNb-Ze-DdB" firstAttribute="leading" secondItem="aMt-vJ-eGL" secondAttribute="leading" constant="10" id="S1s-lY-5Bc"/>
+                <constraint firstItem="max-Gz-CdT" firstAttribute="leading" secondItem="jyj-rL-bdF" secondAttribute="trailing" constant="8" symbolic="YES" id="UfZ-Ia-MVZ"/>
+                <constraint firstItem="qIo-o7-wdx" firstAttribute="leading" secondItem="max-Gz-CdT" secondAttribute="trailing" constant="10" id="khI-dG-O31"/>
+                <constraint firstAttribute="trailing" secondItem="yEh-qn-KuJ" secondAttribute="trailing" constant="20" symbolic="YES" id="mc7-J3-8YQ"/>
+                <constraint firstItem="HQl-qv-p5N" firstAttribute="trailing" secondItem="ybN-pk-lWr" secondAttribute="trailing" id="mjh-zA-csU"/>
+                <constraint firstItem="yEh-qn-KuJ" firstAttribute="leading" secondItem="qIo-o7-wdx" secondAttribute="trailing" constant="20" id="oiv-fh-bhd"/>
+                <constraint firstItem="qIo-o7-wdx" firstAttribute="centerY" secondItem="max-Gz-CdT" secondAttribute="centerY" id="uR2-QK-MoS"/>
+                <constraint firstItem="QNb-Ze-DdB" firstAttribute="top" secondItem="aMt-vJ-eGL" secondAttribute="top" constant="7" id="uXh-Na-Pay"/>
+                <constraint firstItem="yEh-qn-KuJ" firstAttribute="centerY" secondItem="aMt-vJ-eGL" secondAttribute="centerY" id="wJR-eV-9Mh"/>
+                <constraint firstItem="max-Gz-CdT" firstAttribute="centerY" secondItem="jyj-rL-bdF" secondAttribute="centerY" id="yW0-71-rpg"/>
+                <constraint firstItem="HQl-qv-p5N" firstAttribute="top" secondItem="ybN-pk-lWr" secondAttribute="bottom" constant="10" id="yz3-oR-XtZ"/>
+            </constraints>
+            <connections>
+                <outlet property="btnCopyColorFill" destination="qIo-o7-wdx" id="IET-0f-fEO"/>
+                <outlet property="chkDefaultValue" destination="2Y3-Wy-Js5" id="N0b-PQ-Hhk"/>
+                <outlet property="fldFieldName" destination="jyj-rL-bdF" id="EH4-uI-ecq"/>
+            </connections>
+            <point key="canvasLocation" x="-127" y="111"/>
+        </customView>
+    </objects>
+    <resources>
+        <image name="Btn__Type-Checkbox_00000" width="64" height="64"/>
+        <image name="Btn__Visibility-Code_00000" width="32" height="32"/>
+        <image name="Icon_Copy (0-00-00-00)" width="64" height="64"/>
+        <image name="Icon_Remove (0-00-00-00)" width="64" height="64"/>
+    </resources>
+</document>

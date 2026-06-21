@@ -1,0 +1,16 @@
+path = thisProject.fullPath;
+pathSplit = path.split ("/")
+n = pathSplit.length
+fileName = pathSplit [n - 1];
+fileNameL = fileName.length;
+fileNameWOExtension = fileName.substr (0, fileNameL - 4);
+fileNameWOExtensionL = fileNameWOExtension.length;
+localization = fileNameWOExtension.substr (fileNameWOExtensionL - 3, fileNameWOExtensionL - 1);
+var aepFilePath = ""
+for (i = 0; i < n - 1; i++) {
+	aepFilePath += pathSplit [i] + "/";
+}
+bbaeFilePath = aepFilePath += "%%BBASESUBFOLDER%%/%%BBAECOLORFILENAME%%";
+
+$.evalFile (bbaeFilePath);
+%%VARIABLENAME%%

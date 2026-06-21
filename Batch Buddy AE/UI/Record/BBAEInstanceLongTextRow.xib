@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="23504" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23504"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner"/>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView identifier="BBAEInstanceLongTextRow" id="Jxs-ZT-xv6" customClass="BBAEInstanceLongTextRow" customModule="Batch_Buddy_AE" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="559" height="64"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="7jE-1Y-fnw" customClass="UMTextField" customModule="UMOmniaFramework">
+                    <rect key="frame" x="34" y="25" width="100" height="14"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="96" id="QHJ-oY-wzM"/>
+                    </constraints>
+                    <textFieldCell key="cell" lineBreakMode="clipping" title="Field Name:" id="f0K-5a-FVk">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="VPb-D8-HLS">
+                    <rect key="frame" x="10" y="24" width="16" height="16"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="16" id="GOC-xe-BvM"/>
+                        <constraint firstAttribute="height" constant="16" id="LUY-Le-95g"/>
+                    </constraints>
+                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="Btn__Type-Long-Text_00000" id="7bX-ki-cuH"/>
+                </imageView>
+                <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bPd-c6-wVu">
+                    <rect key="frame" x="140" y="2" width="345" height="60"/>
+                    <clipView key="contentView" id="bxH-YF-UDQ">
+                        <rect key="frame" x="0.0" y="0.0" width="330" height="60"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textView importsGraphics="NO" richText="NO" verticallyResizable="YES" fieldEditor="YES" smartInsertDelete="YES" id="Ikq-WK-xZ8">
+                                <rect key="frame" x="0.0" y="0.0" width="330" height="60"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="textColor" white="0.5" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" white="0.90000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <size key="minSize" width="330" height="60"/>
+                                <size key="maxSize" width="505" height="10000000"/>
+                                <attributedString key="textStorage">
+                                    <fragment content="Long Text">
+                                        <attributes>
+                                            <color key="NSColor" white="0.5" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <font key="NSFont" usesAppearanceFont="YES"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
+                                <color key="insertionPointColor" white="0.5" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </textView>
+                        </subviews>
+                    </clipView>
+                    <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="hLf-gH-oay">
+                        <rect key="frame" x="-100" y="-100" width="225" height="15"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </scroller>
+                    <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="G8R-GT-ywK">
+                        <rect key="frame" x="330" y="0.0" width="15" height="60"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </scroller>
+                </scrollView>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="aum-wY-kal" customClass="UMCheckButton" customModule="UMOmniaFramework">
+                    <rect key="frame" x="493" y="23" width="56" height="18"/>
+                    <buttonCell key="cell" type="check" title="Large" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="iXd-xr-ANx">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                </button>
+            </subviews>
+            <constraints>
+                <constraint firstItem="aum-wY-kal" firstAttribute="leading" secondItem="bPd-c6-wVu" secondAttribute="trailing" constant="10" id="EjH-PD-zYB"/>
+                <constraint firstItem="7jE-1Y-fnw" firstAttribute="centerY" secondItem="Jxs-ZT-xv6" secondAttribute="centerY" id="FP0-DW-V07"/>
+                <constraint firstItem="bPd-c6-wVu" firstAttribute="leading" secondItem="7jE-1Y-fnw" secondAttribute="trailing" constant="8" symbolic="YES" id="M3v-aV-7nQ"/>
+                <constraint firstItem="VPb-D8-HLS" firstAttribute="leading" secondItem="Jxs-ZT-xv6" secondAttribute="leading" constant="10" id="MZK-u6-VJS"/>
+                <constraint firstItem="VPb-D8-HLS" firstAttribute="centerY" secondItem="Jxs-ZT-xv6" secondAttribute="centerY" id="QJU-4A-Znv"/>
+                <constraint firstAttribute="trailing" secondItem="aum-wY-kal" secondAttribute="trailing" constant="10" id="R3i-rO-VXL"/>
+                <constraint firstItem="bPd-c6-wVu" firstAttribute="top" secondItem="Jxs-ZT-xv6" secondAttribute="top" constant="2" id="Ung-zN-yLC"/>
+                <constraint firstItem="7jE-1Y-fnw" firstAttribute="leading" secondItem="VPb-D8-HLS" secondAttribute="trailing" constant="10" id="f0n-KR-dzh"/>
+                <constraint firstItem="aum-wY-kal" firstAttribute="firstBaseline" secondItem="7jE-1Y-fnw" secondAttribute="firstBaseline" id="htO-Ju-wOc"/>
+                <constraint firstAttribute="bottom" secondItem="bPd-c6-wVu" secondAttribute="bottom" constant="2" id="zX0-Ra-DXi"/>
+            </constraints>
+            <connections>
+                <outlet property="chkLarge" destination="aum-wY-kal" id="ebz-R2-dZn"/>
+                <outlet property="lblFieldName" destination="7jE-1Y-fnw" id="fci-rX-sVz"/>
+                <outlet property="txtText" destination="Ikq-WK-xZ8" id="Jun-9B-1nR"/>
+            </connections>
+            <point key="canvasLocation" x="96.5" y="304"/>
+        </customView>
+    </objects>
+    <resources>
+        <image name="Btn__Type-Long-Text_00000" width="64" height="64"/>
+    </resources>
+</document>

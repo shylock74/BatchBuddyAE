@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19455" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19455"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner"/>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView identifier="BBAEProjectColorListCell" id="c22-O7-iKe" customClass="BBAEProjectColorListCell" customModule="Batch_Buddy_AE" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="560" height="28"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="wzZ-lq-YIL">
+                    <rect key="frame" x="2" y="7" width="40" height="14"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="36" id="9qy-8B-bzV"/>
+                    </constraints>
+                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Name:" id="rbS-jF-T3N">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Of4-o7-g5V" customClass="UMTextField" customModule="UMOmniaFramework">
+                    <rect key="frame" x="50" y="3" width="302" height="23"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="e0f-q8-pYO">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <colorWell translatesAutoresizingMaskIntoConstraints="NO" id="eS9-LT-IhR">
+                    <rect key="frame" x="360" y="3" width="44" height="23"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="23" id="qC6-4K-CdI"/>
+                        <constraint firstAttribute="width" constant="44" id="zJ1-40-oKp"/>
+                    </constraints>
+                    <color key="color" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <connections>
+                        <action selector="colColorChanged:" target="c22-O7-iKe" id="xhh-C0-VrR"/>
+                    </connections>
+                </colorWell>
+                <button translatesAutoresizingMaskIntoConstraints="NO" id="1EI-xn-CZi">
+                    <rect key="frame" x="524" y="6" width="16" height="16"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="16" id="7BS-hf-yI4"/>
+                        <constraint firstAttribute="width" constant="16" id="j3F-M4-eEZ"/>
+                    </constraints>
+                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Icon_Remove (0-00-00-00)" imagePosition="overlaps" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="twN-KW-rQ7">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="btnRemovePressed:" target="c22-O7-iKe" id="aHb-Io-v2e"/>
+                    </connections>
+                </button>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="mza-8k-0bw">
+                    <rect key="frame" x="450" y="6" width="16" height="16"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="16" id="Vpz-Uw-DHm"/>
+                        <constraint firstAttribute="width" constant="16" id="gju-ZP-3xt"/>
+                    </constraints>
+                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Btn__Copy-Code_00000" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="iuN-nT-G0b">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <color key="contentTintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <connections>
+                        <action selector="btnCopyAEcodePressed:" target="c22-O7-iKe" id="DG8-Gz-j73"/>
+                    </connections>
+                </button>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="sJ8-VX-iaN">
+                    <rect key="frame" x="476" y="6" width="16" height="16"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="16" id="GZZ-uI-a6r"/>
+                        <constraint firstAttribute="width" constant="16" id="zHy-lC-tSz"/>
+                    </constraints>
+                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Btn__Copy-Fill_00000" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="T7j-kr-FlD">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <color key="contentTintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <connections>
+                        <action selector="btnCopyColorFillPressed:" target="c22-O7-iKe" id="zZK-7X-zeh"/>
+                    </connections>
+                </button>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="M86-XE-NDd">
+                    <rect key="frame" x="424" y="6" width="16" height="16"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="16" id="avx-ua-Idy"/>
+                        <constraint firstAttribute="height" constant="16" id="lSc-BT-sXC"/>
+                    </constraints>
+                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Btn__Hex_00000" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="xhQ-AK-SC9">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <color key="contentTintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <connections>
+                        <action selector="btnCopyHex:" target="c22-O7-iKe" id="bE7-7D-rZG"/>
+                    </connections>
+                </button>
+            </subviews>
+            <constraints>
+                <constraint firstItem="eS9-LT-IhR" firstAttribute="leading" secondItem="Of4-o7-g5V" secondAttribute="trailing" constant="8" symbolic="YES" id="1gJ-eu-Lq2"/>
+                <constraint firstAttribute="trailing" secondItem="1EI-xn-CZi" secondAttribute="trailing" constant="20" symbolic="YES" id="HV6-gj-9Fe"/>
+                <constraint firstItem="Of4-o7-g5V" firstAttribute="centerY" secondItem="c22-O7-iKe" secondAttribute="centerY" id="HsQ-3I-lCN"/>
+                <constraint firstItem="1EI-xn-CZi" firstAttribute="leading" secondItem="sJ8-VX-iaN" secondAttribute="trailing" constant="32" id="Jkz-9I-b5t"/>
+                <constraint firstItem="M86-XE-NDd" firstAttribute="centerY" secondItem="mza-8k-0bw" secondAttribute="centerY" id="Kfs-n0-S5h"/>
+                <constraint firstItem="wzZ-lq-YIL" firstAttribute="centerY" secondItem="c22-O7-iKe" secondAttribute="centerY" id="M1p-KW-RZE"/>
+                <constraint firstItem="Of4-o7-g5V" firstAttribute="leading" secondItem="wzZ-lq-YIL" secondAttribute="trailing" constant="10" id="PKD-Bf-iOS"/>
+                <constraint firstItem="sJ8-VX-iaN" firstAttribute="centerY" secondItem="c22-O7-iKe" secondAttribute="centerY" id="WCy-ly-L6k"/>
+                <constraint firstItem="mza-8k-0bw" firstAttribute="centerY" secondItem="c22-O7-iKe" secondAttribute="centerY" id="dAc-1c-o0O"/>
+                <constraint firstItem="M86-XE-NDd" firstAttribute="leading" secondItem="eS9-LT-IhR" secondAttribute="trailing" constant="20" id="gb9-Vi-Twb"/>
+                <constraint firstItem="wzZ-lq-YIL" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" constant="4" id="gnj-OO-qyC"/>
+                <constraint firstItem="eS9-LT-IhR" firstAttribute="centerY" secondItem="c22-O7-iKe" secondAttribute="centerY" id="ixN-DU-obf"/>
+                <constraint firstItem="mza-8k-0bw" firstAttribute="leading" secondItem="M86-XE-NDd" secondAttribute="trailing" constant="10" id="lVb-8h-9us"/>
+                <constraint firstItem="eS9-LT-IhR" firstAttribute="top" secondItem="Of4-o7-g5V" secondAttribute="top" id="o0D-Kc-fCz"/>
+                <constraint firstItem="sJ8-VX-iaN" firstAttribute="leading" secondItem="mza-8k-0bw" secondAttribute="trailing" constant="10" id="rqN-8u-KOY"/>
+                <constraint firstItem="1EI-xn-CZi" firstAttribute="centerY" secondItem="c22-O7-iKe" secondAttribute="centerY" id="x8P-Ic-YkW"/>
+            </constraints>
+            <connections>
+                <outlet property="colColor" destination="eS9-LT-IhR" id="3Bz-Iv-ik4"/>
+                <outlet property="fldName" destination="Of4-o7-g5V" id="2xY-A0-5sx"/>
+            </connections>
+            <point key="canvasLocation" x="160.5" y="120"/>
+        </customView>
+    </objects>
+    <resources>
+        <image name="Btn__Copy-Code_00000" width="64" height="64"/>
+        <image name="Btn__Copy-Fill_00000" width="64" height="64"/>
+        <image name="Btn__Hex_00000" width="64" height="64"/>
+        <image name="Icon_Remove (0-00-00-00)" width="64" height="64"/>
+    </resources>
+</document>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="23504" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23504"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner"/>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView identifier="BBAEInstanceCheckboxRow" id="1uT-yE-qMo" customClass="BBAEInstanceCheckboxRow" customModule="Batch_Buddy_AE" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="480" height="28"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="sVq-F1-ToC">
+                    <rect key="frame" x="34" y="7" width="100" height="14"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="96" id="5dY-Kb-ABh"/>
+                    </constraints>
+                    <textFieldCell key="cell" lineBreakMode="clipping" title="Field Name:" id="DDV-aV-BXJ">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="zy3-Lo-7eD" customClass="UMCheckButton" customModule="UMOmniaFramework">
+                    <rect key="frame" x="140" y="5" width="59" height="18"/>
+                    <buttonCell key="cell" type="check" title="Active" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Ve1-gu-S4e">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                </button>
+                <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="gZ7-lx-b7Z">
+                    <rect key="frame" x="10" y="6" width="16" height="16"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="16" id="06V-L4-Lsz"/>
+                        <constraint firstAttribute="width" constant="16" id="HsH-Az-61T"/>
+                    </constraints>
+                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="Btn__Type-Checkbox_00000" id="Dig-h7-nd7"/>
+                </imageView>
+            </subviews>
+            <constraints>
+                <constraint firstItem="gZ7-lx-b7Z" firstAttribute="leading" secondItem="1uT-yE-qMo" secondAttribute="leading" constant="10" id="32I-gT-La7"/>
+                <constraint firstItem="zy3-Lo-7eD" firstAttribute="leading" secondItem="sVq-F1-ToC" secondAttribute="trailing" constant="10" id="4qm-ik-ASv"/>
+                <constraint firstItem="sVq-F1-ToC" firstAttribute="leading" secondItem="gZ7-lx-b7Z" secondAttribute="trailing" constant="10" id="PWP-NA-Eaw"/>
+                <constraint firstItem="sVq-F1-ToC" firstAttribute="centerY" secondItem="1uT-yE-qMo" secondAttribute="centerY" id="ZZT-NJ-tz3"/>
+                <constraint firstItem="gZ7-lx-b7Z" firstAttribute="centerY" secondItem="1uT-yE-qMo" secondAttribute="centerY" id="ZaQ-IA-qyB"/>
+                <constraint firstItem="zy3-Lo-7eD" firstAttribute="firstBaseline" secondItem="sVq-F1-ToC" secondAttribute="firstBaseline" id="xJk-yF-q3R"/>
+            </constraints>
+            <connections>
+                <outlet property="chkCheckbox" destination="zy3-Lo-7eD" id="5iF-94-DWP"/>
+                <outlet property="lblFieldName" destination="sVq-F1-ToC" id="3ah-cO-zmK"/>
+            </connections>
+            <point key="canvasLocation" x="72" y="120"/>
+        </customView>
+    </objects>
+    <resources>
+        <image name="Btn__Type-Checkbox_00000" width="64" height="64"/>
+    </resources>
+</document>

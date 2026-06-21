@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="18122" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="18122"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner"/>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView identifier="BBAEOutputModuleCell" id="c22-O7-iKe" customClass="BBAEOutputModuleCell" customModule="Batch_Buddy_AE" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="535" height="28"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <button translatesAutoresizingMaskIntoConstraints="NO" id="1l1-C9-2qH">
+                    <rect key="frame" x="505" y="4" width="20" height="20"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="20" id="6vO-pR-ECB"/>
+                        <constraint firstAttribute="width" constant="20" id="sOe-cK-Bbr"/>
+                    </constraints>
+                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Icon_Remove (0-00-00-00)" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="nsJ-PB-bXx">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="btnRemovePressed:" target="c22-O7-iKe" id="sOU-ck-nDT"/>
+                    </connections>
+                </button>
+                <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="PWv-lb-EMw" customClass="UMTextField" customModule="UMOmniaFramework">
+                    <rect key="frame" x="0.0" y="4" width="431" height="21"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="N7a-M6-ww4">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="eax-0v-C1y" customClass="UMTextField" customModule="UMOmniaFramework">
+                    <rect key="frame" x="441" y="4" width="54" height="21"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="54" id="Pg2-8Q-wuO"/>
+                    </constraints>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="PDf-7C-uOq">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+            </subviews>
+            <constraints>
+                <constraint firstItem="PWv-lb-EMw" firstAttribute="centerY" secondItem="c22-O7-iKe" secondAttribute="centerY" id="0AT-PF-DrD"/>
+                <constraint firstAttribute="trailing" secondItem="1l1-C9-2qH" secondAttribute="trailing" constant="10" id="0dJ-HS-Fdg"/>
+                <constraint firstItem="PWv-lb-EMw" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" id="8q1-7k-w62"/>
+                <constraint firstItem="eax-0v-C1y" firstAttribute="centerY" secondItem="c22-O7-iKe" secondAttribute="centerY" id="DN5-5k-I5I"/>
+                <constraint firstItem="1l1-C9-2qH" firstAttribute="centerY" secondItem="c22-O7-iKe" secondAttribute="centerY" id="JOf-En-SV2"/>
+                <constraint firstItem="1l1-C9-2qH" firstAttribute="leading" secondItem="eax-0v-C1y" secondAttribute="trailing" constant="10" id="iWP-1r-vsT"/>
+                <constraint firstItem="eax-0v-C1y" firstAttribute="leading" secondItem="PWv-lb-EMw" secondAttribute="trailing" constant="10" id="zKS-2e-lcl"/>
+            </constraints>
+            <connections>
+                <outlet property="fldExt" destination="eax-0v-C1y" id="UOV-Nd-pNv"/>
+                <outlet property="fldName" destination="PWv-lb-EMw" id="svx-SD-g6M"/>
+            </connections>
+            <point key="canvasLocation" x="102.5" y="-20"/>
+        </customView>
+    </objects>
+    <resources>
+        <image name="Icon_Remove (0-00-00-00)" width="128" height="128"/>
+    </resources>
+</document>

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19455" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19455"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner">
+            <connections>
+                <outlet property="fldName" destination="Mjw-5I-F82" id="RRE-nR-Mv4"/>
+                <outlet property="fldShort" destination="8Ld-6b-Kr6" id="4bR-OX-qIu"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView identifier="BBAETemplateGroupCell" id="c22-O7-iKe" customClass="BBAETemplateGroupCell" customModule="Batch_Buddy_AE" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="571" height="49"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="8Ld-6b-Kr6" customClass="UMTextField" customModule="UMOmniaFramework">
+                    <rect key="frame" x="0.0" y="14" width="100" height="21"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="100" id="KfT-We-7Tb"/>
+                    </constraints>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="VcT-9O-was">
+                        <font key="font" usesAppearanceFont="YES"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Mjw-5I-F82" customClass="UMTextField" customModule="UMOmniaFramework">
+                    <rect key="frame" x="110" y="14" width="306" height="21"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="Msz-I6-qP8">
+                        <font key="font" usesAppearanceFont="YES"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <button translatesAutoresizingMaskIntoConstraints="NO" id="vFl-BU-iTO">
+                    <rect key="frame" x="555" y="17" width="16" height="16"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="16" id="bJn-10-CkW"/>
+                        <constraint firstAttribute="height" constant="16" id="iqm-dq-v5K"/>
+                    </constraints>
+                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Icon_Remove (0-00-00-00)" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="M2g-mg-vAh">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="btnRemovePressed:" target="c22-O7-iKe" id="Ngy-W9-peC"/>
+                    </connections>
+                </button>
+                <button translatesAutoresizingMaskIntoConstraints="NO" id="pQ1-mI-Hwp">
+                    <rect key="frame" x="535" y="17" width="16" height="16"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="16" id="Dtf-4b-zNK"/>
+                        <constraint firstAttribute="height" constant="16" id="g2C-j4-9FJ"/>
+                    </constraints>
+                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Btn__Duplicate_00000" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="0uK-qz-gZU">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="btnDuplicatePressed:" target="c22-O7-iKe" id="luc-bd-olY"/>
+                    </connections>
+                </button>
+                <button translatesAutoresizingMaskIntoConstraints="NO" id="kM4-Ew-nV5">
+                    <rect key="frame" x="499" y="17" width="16" height="16"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="16" id="biZ-iG-Ady"/>
+                        <constraint firstAttribute="height" constant="16" id="sek-8m-ocZ"/>
+                    </constraints>
+                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Btn__Settings_00000" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="aU2-4k-ZFo">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="btnSettingsPressed:" target="c22-O7-iKe" id="qvd-Op-AMg"/>
+                    </connections>
+                </button>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="UcP-45-I9j" customClass="UMCheckButton" customModule="UMOmniaFramework">
+                    <rect key="frame" x="424" y="16" width="59" height="18"/>
+                    <buttonCell key="cell" type="check" title="Active" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="fn3-wz-Wrr">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                </button>
+            </subviews>
+            <constraints>
+                <constraint firstItem="Mjw-5I-F82" firstAttribute="centerY" secondItem="c22-O7-iKe" secondAttribute="centerY" id="1Ax-nI-NGj"/>
+                <constraint firstAttribute="trailing" secondItem="vFl-BU-iTO" secondAttribute="trailing" id="1l1-2P-51U"/>
+                <constraint firstItem="UcP-45-I9j" firstAttribute="leading" secondItem="Mjw-5I-F82" secondAttribute="trailing" constant="10" id="PUA-wd-2on"/>
+                <constraint firstItem="pQ1-mI-Hwp" firstAttribute="centerY" secondItem="vFl-BU-iTO" secondAttribute="centerY" id="UTU-6h-dKs"/>
+                <constraint firstItem="vFl-BU-iTO" firstAttribute="leading" secondItem="pQ1-mI-Hwp" secondAttribute="trailing" constant="4" id="Yyj-91-JfG"/>
+                <constraint firstItem="kM4-Ew-nV5" firstAttribute="centerY" secondItem="pQ1-mI-Hwp" secondAttribute="centerY" id="cxo-9c-wUl"/>
+                <constraint firstItem="pQ1-mI-Hwp" firstAttribute="centerY" secondItem="Mjw-5I-F82" secondAttribute="centerY" id="fL3-fZ-7ff"/>
+                <constraint firstItem="pQ1-mI-Hwp" firstAttribute="leading" secondItem="kM4-Ew-nV5" secondAttribute="trailing" constant="20" id="gyr-8o-pcK"/>
+                <constraint firstItem="Mjw-5I-F82" firstAttribute="leading" secondItem="8Ld-6b-Kr6" secondAttribute="trailing" constant="10" id="kaz-IQ-s0Y"/>
+                <constraint firstItem="8Ld-6b-Kr6" firstAttribute="centerY" secondItem="c22-O7-iKe" secondAttribute="centerY" id="lSo-Gx-GZo"/>
+                <constraint firstItem="kM4-Ew-nV5" firstAttribute="leading" secondItem="UcP-45-I9j" secondAttribute="trailing" constant="16" id="qdG-TL-gc7"/>
+                <constraint firstItem="UcP-45-I9j" firstAttribute="centerY" secondItem="Mjw-5I-F82" secondAttribute="centerY" id="qlr-UP-bvh"/>
+                <constraint firstItem="8Ld-6b-Kr6" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" id="vdx-4c-ake"/>
+            </constraints>
+            <connections>
+                <outlet property="chkActive" destination="UcP-45-I9j" id="ZgH-m2-vHg"/>
+                <outlet property="fldName" destination="Mjw-5I-F82" id="kSl-i6-Yht"/>
+                <outlet property="fldShort" destination="8Ld-6b-Kr6" id="egx-HB-uJV"/>
+            </connections>
+            <point key="canvasLocation" x="26.5" y="51.5"/>
+        </customView>
+    </objects>
+    <resources>
+        <image name="Btn__Duplicate_00000" width="64" height="64"/>
+        <image name="Btn__Settings_00000" width="64" height="64"/>
+        <image name="Icon_Remove (0-00-00-00)" width="64" height="64"/>
+    </resources>
+</document>

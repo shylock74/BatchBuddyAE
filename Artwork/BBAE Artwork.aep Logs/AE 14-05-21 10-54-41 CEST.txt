@@ -1,0 +1,1 @@
+  14/05/21 10:54:41 CEST: Starting composition “Icon_Render”.  Output To: /Volumes/Macintosh HD/Users/alex/_Render/_After Effects/Icon_Render/Icon_Render_[#####].png    14/05/21 10:54:41 CEST: Finished composition “Icon_Render”.  Total Time Elapsed: 0 SecondsLog closed on 14/05/21 at 10:54:41 CEST
