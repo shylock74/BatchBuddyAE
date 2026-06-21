@@ -6,41 +6,48 @@
 //
 
 import Cocoa
+import SwiftUI
 import UMOmniaFramework
+import UMUIControls
 
-class BBAEProjectVC :	UMViewController {
+class BBAEProjectVC :	UMViewController, ObservableObject {
 	
 	static let storyboardId = 	"BBAEProjectVC"
 	
 	// MARK: - UI Elements
-	@IBOutlet weak var srcSearch: UMSearchField!
-	@IBOutlet weak var popTemplateList: UMPopUpButton!
-	@IBOutlet weak var btnShowToRender: NSButton!
-	@IBOutlet weak var tblRecordList: UMTableView!
-	@IBOutlet weak var chkRenderAll: UMCheckButton!
-	@IBOutlet weak var lblItemsCount: NSTextField!
-	@IBOutlet weak var lblStatus: NSTextField!
+	@IBOutlet weak var srcSearch: UMSearchField?
+	@IBOutlet weak var popTemplateList: UMPopUpButton?
+	@IBOutlet weak var btnShowToRender: NSButton?
+	@IBOutlet weak var tblRecordList: UMTableView?
+	@IBOutlet weak var chkRenderAll: UMCheckButton?
+	@IBOutlet weak var lblItemsCount: NSTextField?
+	@IBOutlet weak var lblStatus: NSTextField?
 	@IBOutlet var mnuCtxRender: NSMenu!
 	
-	@IBOutlet weak var cnsTableLeading: NSLayoutConstraint!
-	@IBOutlet weak var cnsTableTrailing: NSLayoutConstraint!
+	@IBOutlet weak var cnsTableLeading: NSLayoutConstraint?
+	@IBOutlet weak var cnsTableTrailing: NSLayoutConstraint?
 	
 	// MARK: - Vars
 	var project :		BBAEProject!
-	var searchText :	String =	""
-	var searchComp =	"*"
+	@Published var searchText :	String =	""
+	@Published var searchComp =	"*"
 	var searchQueue =	UMPressureTask ()
 	var isNew :			Bool!
 	
 	private let vcObserverId = UMId.newId (useCounter: false)
 	
-	var displayMode :	BBAERecord.DisplayMode =	.normal
+	@Published var displayMode :	BBAERecord.DisplayMode =	.normal
 	
 	static var currentProject :	BBAEProject?
 	
 	@UMDef (key: "firstLaunch", def: true) var firstlaunch
 
-	var showToBeRenderedOnly =	false
+	@Published var showToBeRenderedOnly =	false
+	@Published var itemsCountText: String = ""
+	@Published var statusText: String = ""
+	@Published var renderAll: Bool = false
+	
+	var strongScrollView: NSScrollView?
 	
 	func itemFoundList () -> [BBAERecord] {
 		var itemInstanceListFilteredByTemplate = searchComp == "*"
@@ -59,21 +66,25 @@ class BBAEProjectVC :	UMViewController {
 	// MARK: - Display
 	func displayButtonToBeRenderedOnly () {
 		XMain.execute { [self] in
-			btnShowToRender.image = Draw.getImage (showToBeRenderedOnly ? "Icon_Render_00001" : "Icon_Render_00000")
+			if let btn = btnShowToRender {
+				btn.image = Draw.getImage (showToBeRenderedOnly ? "Icon_Render_00001" : "Icon_Render_00000")
+			}
 		}
 	}
 	
 	func populateTemplate () {
-		popTemplateList.clear ()
-		popTemplateList.addItem (title: "All Comp Templates",
+		popTemplateList?.clear ()
+		popTemplateList?.addItem (title: "All Comp Templates",
 								 value: "*")
-		popTemplateList.addSeparator ()
-		for template in project.compList {
-			popTemplateList.addItem (title: template.name,
-									 value: template.id)
+		popTemplateList?.addSeparator ()
+		if let compList = project?.compList {
+			for template in compList {
+				popTemplateList?.addItem (title: template.name,
+										 value: template.id)
+			}
 		}
-		popTemplateList.setValueAsString (value: "*")
-		popTemplateList.userSelectedCallback = { [weak self] value in
+		popTemplateList?.setValueAsString (value: "*")
+		popTemplateList?.userSelectedCallback = { [weak self] value in
 			guard let valueS = value as? String else { return }
 			self?.searchComp = valueS
 			self?.performSearch ()
@@ -82,29 +93,32 @@ class BBAEProjectVC :	UMViewController {
 	
 	// MARK: - table
 	func setupTable () {
-		tblRecordList.rowCount = {
+		tblRecordList?.rowCount = {
 			self.itemFoundList ().count
 		}
-		tblRecordList.registerCell (cellId: "BBAERecordCell")
-		tblRecordList.registerCell (cellId: BBAERecordCompactRow.cellId)
-		tblRecordList.cellHandler = { [self] row in
+		tblRecordList?.registerCell (cellId: "BBAERecordCell")
+		tblRecordList?.registerCell (cellId: BBAERecordCompactRow.cellId)
+		tblRecordList?.cellHandler = { [self] row in
 			let found = itemFoundList ()
 			guard row < found.count else { return nil }
-			if found [row].displayMode == .normal {
-				return BBAERecordCell.getCell (tblRecordList,
-											   record: found [row],
-											   project: project,
-											   fatherController: self,
-											   delegate: self)
-			} else {
-				return BBAERecordCompactRow.getCell (tblRecordList,
-													   record: found [row],
-													   project: project,
-													   fatherController: self,
-													   delegate: self)
+			if let table = tblRecordList {
+				if found [row].displayMode == .normal {
+					return BBAERecordCell.getCell (table,
+												   record: found [row],
+												   project: project,
+												   fatherController: self,
+												   delegate: self)
+				} else {
+					return BBAERecordCompactRow.getCell (table,
+														   record: found [row],
+														   project: project,
+														   fatherController: self,
+														   delegate: self)
+				}
 			}
+			return nil
 		}
-		tblRecordList.cellHeight = { [self] row in
+		tblRecordList?.cellHeight = { [self] row in
 			let record = itemFoundList () [row]
 			return record.displayMode == .normal ? record.cellHeight () : 28
 		}
@@ -115,11 +129,15 @@ class BBAEProjectVC :	UMViewController {
 //	}
 	
 	func displatItemsCount () {
-		lblItemsCount.setValue ("Items: \(self.itemFoundList ().count)/\(project.recordList.count) (\((project.recordList.filter { $0.status == .toBeRendered }).count ) to be rendered)")
+		let countText = "Items: \(self.itemFoundList ().count)/\(project.recordList.count) (\((project.recordList.filter { $0.status == .toBeRendered }).count ) to be rendered)"
+		XMain.execute { [weak self] in
+			self?.itemsCountText = countText
+		}
+		lblItemsCount?.setValue (countText)
 	}
 	
 	func setupSearch () {
-		srcSearch.searchTextChanged = { text in
+		srcSearch?.searchTextChanged = { text in
 			self.searchText = text
 			self.performSearch ()
 		}
@@ -129,7 +147,7 @@ class BBAEProjectVC :	UMViewController {
 		XMain.execute { [self] in
 			setupSearch ()
 			
-			chkRenderAll.setup (initialValue: false) { value in
+			chkRenderAll?.setup (initialValue: false) { value in
 				self.itemFoundList ().forEach {
 					$0.status = value ? .toBeRendered : .rendered
 				}
@@ -138,15 +156,16 @@ class BBAEProjectVC :	UMViewController {
 			displatItemsCount ()
 			
 			populateTemplate ()
-			srcSearch.delegate = self
+			srcSearch?.delegate = self
 			
-			lblStatus.setValue ("")
+			self.statusText = ""
+			lblStatus?.setValue ("")
 		}
 		displayButtonToBeRenderedOnly ()
 	}
 	
 	func updateLiveData () {
-		tblRecordList.reloadDataInMainThread ()
+		tblRecordList?.reloadDataInMainThread ()
 		displayButtonToBeRenderedOnly ()
 		displatItemsCount ()
 	}
@@ -159,16 +178,46 @@ class BBAEProjectVC :	UMViewController {
 			self?.displayButtonToBeRenderedOnly ()
 		}
 		UMNotify.observeString (keyword: project.statusUpdateKey) { [weak self] status in
-			self?.lblStatus.setValue (status)
+			XMain.execute {
+				self?.statusText = status
+			}
+			self?.lblStatus?.setValue (status)
 			self?.displayButtonToBeRenderedOnly ()
 		}
 	}
 	
 	// MARK: - View Cycle
+	override func viewDidLoad () {
+		super.viewDidLoad ()
+		
+		// Capture and retain the scroll view of the table view
+		self.strongScrollView = tblRecordList?.enclosingScrollView
+		
+		// Remove all existing subviews loaded from the storyboard to prevent overlapping!
+		self.view.subviews.forEach { subview in
+			if subview != strongScrollView {
+				subview.removeFromSuperview ()
+			}
+		}
+		
+		// Seamlessly embed the modern SwiftUI View inside NSHostingView
+		let hostingView = NSHostingView (rootView: BBAEProjectView (vc: self))
+		hostingView.translatesAutoresizingMaskIntoConstraints = false
+		
+		self.view.addSubview (hostingView)
+		
+		NSLayoutConstraint.activate ([
+			hostingView.leadingAnchor.constraint (equalTo: self.view.leadingAnchor),
+			hostingView.trailingAnchor.constraint (equalTo: self.view.trailingAnchor),
+			hostingView.topAnchor.constraint (equalTo: self.view.topAnchor),
+			hostingView.bottomAnchor.constraint (equalTo: self.view.bottomAnchor)
+		])
+	}
+
 	override func willAppear () {
 		setupTable ()
 		displayData ()
-		tblRecordList.reloadData ()
+		tblRecordList?.reloadData ()
 		setupObservers ()
 		if isNew {
 			isNew = false
@@ -177,10 +226,10 @@ class BBAEProjectVC :	UMViewController {
 		}
 		
 		if #available(OSX 11.0, *) {
-			cnsTableLeading.constant = 0
-			cnsTableTrailing.constant = 0
+			cnsTableLeading?.constant = 0
+			cnsTableTrailing?.constant = 0
 		}
-		tblRecordList.addRoundedBackground (color: NSColor (deviceWhite: 0.15, alpha: 1))
+		tblRecordList?.addRoundedBackground (color: NSColor (deviceWhite: 0.15, alpha: 1))
 	}
 	
 	override func appeared () {
@@ -251,7 +300,7 @@ Would you like me to search it?
 		project.recordList.append (newRecord)
 		project.save ()
 		updateLiveData ()
-		tblRecordList.scroll (toRow: project.recordList.count - 1)
+		tblRecordList?.scroll (toRow: project.recordList.count - 1)
 	}
 	
 	@IBAction func btnRenderPressed (_ sender: Any) {
@@ -410,7 +459,7 @@ extension BBAEProjectVC :	BBAERecordCellDelegate {
 		project.duplicateItem (id)
 		project.save ()
 		updateLiveData ()
-		tblRecordList.scroll (toRow: project.recordList.count - 1)
+		tblRecordList?.scroll (toRow: project.recordList.count - 1)
 	}
 }
 
@@ -434,10 +483,12 @@ extension BBAEProjectVC :	NSTextDelegate,
 							 NSSearchFieldDelegate {
 	
 	func performSearch () {
-		searchText = srcSearch.stringValue
+		if let src = srcSearch {
+			searchText = src.stringValue
+		}
 		Queue.execute { [self] in
 			searchQueue.perform {
-				updateLiveData ()
+				self.updateLiveData ()
 			}
 		}
 	}
@@ -452,5 +503,198 @@ extension BBAEProjectVC :	NSTextDelegate,
 	
 	func searchFieldDidEndSearching (_ sender: NSSearchField) {
 		performSearch ()
+	}
+}
+
+// MARK: - SwiftUI Views
+struct BBAEProjectView : View {
+	@ObservedObject var vc: BBAEProjectVC
+	
+	var body: some View {
+		VStack(spacing: 0) {
+			// Header Area
+			BBAEProjectHeaderView(vc: vc)
+			
+			// Main Content - TableView wrapped in NSViewRepresentable
+			if let scrollView = vc.strongScrollView {
+				TableViewContainer(scrollView: scrollView)
+			} else {
+				Color.clear
+			}
+			
+			// Footer Area
+			BBAEProjectFooterView(vc: vc)
+		}
+		.background(Color.darkGray)
+	}
+}
+
+struct TableViewContainer: NSViewRepresentable {
+	let scrollView: NSScrollView
+	
+	func makeNSView(context: Context) -> NSScrollView {
+		scrollView.removeFromSuperview()
+		return scrollView
+	}
+	
+	func updateNSView(_ nsView: NSScrollView, context: Context) {
+		// Handled internally by AppKit table cell handlers
+	}
+}
+
+struct BBAEProjectHeaderView: View {
+	@ObservedObject var vc: BBAEProjectVC
+	
+	var body: some View {
+		VStack(spacing: 8) {
+			// Row 1: Search & Filter controls
+			HStack(spacing: 10) {
+				// Search Input
+				UMUITextField(
+					placeholder: "Search...",
+					value: Binding(
+						get: { vc.searchText },
+						set: { newValue in
+							vc.searchText = newValue
+							vc.performSearch()
+						}
+					),
+					size: .small
+				)
+				.frame(width: 180)
+				
+				// Templates Filter Picker
+				Picker("", selection: Binding(
+					get: { vc.searchComp },
+					set: { newValue in
+						vc.searchComp = newValue
+						vc.performSearch()
+					}
+				)) {
+					Text("All Comp Templates").tag("*")
+					ForEach(vc.project.compList, id: \.id) { comp in
+						Text(comp.name).tag(comp.id)
+					}
+				}
+				.pickerStyle(MenuPickerStyle())
+				.frame(width: 180)
+				
+				// Pending Only Toggle Button
+				UMUICapsuleButton(
+					style: vc.showToBeRenderedOnly ? .accent : .gray,
+					size: .small,
+					action: {
+						vc.showToBeRenderedOnly.toggle()
+						vc.updateLiveData()
+					}
+				) {
+					HStack(spacing: 4) {
+						if let nsImg = Draw.getImage(vc.showToBeRenderedOnly ? "Icon_Render_00001" : "Icon_Render_00000") {
+							Image(nsImage: nsImg)
+								.resizable()
+								.aspectRatio(contentMode: .fit)
+								.frame(width: 12, height: 12)
+						}
+						Text("Pending Only")
+							.font(.system(size: 11))
+					}
+				}
+				
+				// Compact Mode Toggle Button
+				UMUICapsuleButton(
+					vc.displayMode == .normal ? "Compact View" : "Normal View",
+					systemImage: vc.displayMode == .normal ? "square.dashed.inset.filled" : "list.bullet.rectangle",
+					style: .gray,
+					size: .small,
+					action: {
+						vc.btnCompactPressed(vc)
+					}
+				)
+				
+				Spacer()
+			}
+			
+			// Row 2: Action Buttons
+			HStack(spacing: 8) {
+				UMUICapsuleButton("Add Item", systemImage: "plus", style: .gray, size: .small) {
+					vc.btnaddItemPressed(vc)
+				}
+				
+				UMUICapsuleButton("Templates", systemImage: "doc.text", style: .gray, size: .small) {
+					vc.btnTemplates(vc)
+				}
+				
+				UMUICapsuleButton("Template Panel", systemImage: "rectangle.3.group", style: .gray, size: .small) {
+					vc.btnTemplatePanelPressed(vc)
+				}
+				
+				UMUICapsuleButton("Colors", systemImage: "paintpalette", style: .gray, size: .small) {
+					vc.btnColorsPressed(vc)
+				}
+				
+				UMUICapsuleButton("Render Folder", systemImage: "folder", style: .gray, size: .small) {
+					vc.btnRenderFolderPressed(vc)
+				}
+				
+				UMUICapsuleButton("Project Settings", systemImage: "gearshape", style: .gray, size: .small) {
+					vc.btnProjectSettingsPressed(vc)
+				}
+				
+				Spacer()
+				
+				UMUICapsuleButton("Render Comps", systemImage: "play.fill", style: .accent, size: .small) {
+					vc.btnRenderPressed(vc)
+				}
+			}
+		}
+		.padding(.horizontal, 12)
+		.padding(.vertical, 8)
+		.background(Color.mildDarkGray)
+	}
+}
+
+struct BBAEProjectFooterView: View {
+	@ObservedObject var vc: BBAEProjectVC
+	
+	var body: some View {
+		HStack {
+			// Switch for Render All
+			UMUIMiniSwitch(
+				"Render All",
+				isOn: Binding(
+					get: { vc.renderAll },
+					set: { newValue in
+						vc.renderAll = newValue
+						vc.itemFoundList().forEach {
+							$0.status = newValue ? .toBeRendered : .rendered
+						}
+						vc.updateLiveData()
+					}
+				)
+			)
+			
+			UMUIHSpacer(16)
+			
+			// Items count text
+			Text(vc.itemsCountText)
+				.font(.system(size: 11, weight: .medium, design: .rounded))
+				.foregroundColor(.secondary)
+			
+			Spacer()
+			
+			// Status messages
+			if !vc.statusText.isEmpty {
+				Text(vc.statusText)
+					.font(.system(size: 11, design: .monospaced))
+					.foregroundColor(.accentColor)
+					.padding(.horizontal, 8)
+					.padding(.vertical, 2)
+					.background(Color.accentColor.opacity(0.15))
+					.cornerRadius(4)
+			}
+		}
+		.padding(.horizontal, 12)
+		.padding(.vertical, 6)
+		.background(Color.mildDarkGray)
 	}
 }

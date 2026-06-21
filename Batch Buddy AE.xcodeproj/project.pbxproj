@@ -25,6 +25,7 @@
 		871013FE2626FB7300884B79 /* BBAESettings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 871013FD2626FB7300884B79 /* BBAESettings.storyboard */; };
 		871014002626FC4500884B79 /* BBAESettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 871013FF2626FC4500884B79 /* BBAESettingsVC.swift */; };
 		871014032626FD8D00884B79 /* UMAERender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 871014022626FD8D00884B79 /* UMAERender.swift */; };
+		8711EE192FE8271D0078EDCF /* UMUIControls in Frameworks */ = {isa = PBXBuildFile; productRef = 8711EE182FE8271D0078EDCF /* UMUIControls */; };
 		871267B3278ACDA500E6EAA9 /* BBAEInstanceNumberSliderRow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 871267B2278ACDA500E6EAA9 /* BBAEInstanceNumberSliderRow.xib */; };
 		871267B5278ACEA500E6EAA9 /* BBAEInstanceNumberSliderRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 871267B4278ACEA500E6EAA9 /* BBAEInstanceNumberSliderRow.swift */; };
 		871267B7278B226700E6EAA9 /* BBAEInstanceNumberStepperRow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 871267B6278B226700E6EAA9 /* BBAEInstanceNumberStepperRow.xib */; };
@@ -238,6 +239,7 @@
 				87B24CDC2EBCF8B500D8E481 /* UMImaging.framework in Frameworks */,
 				8705E863264AC732005455F5 /* UMMovie.framework in Frameworks */,
 				87DB66B027B112720042F33C /* UMMIH.framework in Frameworks */,
+				8711EE192FE8271D0078EDCF /* UMUIControls in Frameworks */,
 				872B9E2C2E852F3C00B6B925 /* FPH.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -515,6 +517,9 @@
 				Base,
 			);
 			mainGroup = 871013C82626D42400884B79;
+			packageReferences = (
+				8711EE172FE8271D0078EDCF /* XCRemoteSwiftPackageReference "UMUIControls" */,
+			);
 			productRefGroup = 871013D22626D42400884B79 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -865,6 +870,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		8711EE172FE8271D0078EDCF /* XCRemoteSwiftPackageReference "UMUIControls" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/shylock74/UMUIControls";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		8711EE182FE8271D0078EDCF /* UMUIControls */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8711EE172FE8271D0078EDCF /* XCRemoteSwiftPackageReference "UMUIControls" */;
+			productName = UMUIControls;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 871013C92626D42400884B79 /* Project object */;
 }

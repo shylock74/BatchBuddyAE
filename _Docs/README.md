@@ -296,3 +296,20 @@ To implement automation with Batch Buddy AE, adopt the following system workflow
 3. **Link Media Assets**: For footage assets, import the placeholder files (e.g. `Placeholder_LT_Slide_Speaker_Pic.png` from the `_BBAE` folder) into the After Effects project. Set up compositions using these assets.
 4. **Data Input**: Create a `.bbae` project, link it to the `.aep` template, and define the input schema.
 5. **Populate & Render**: Import your data, define your records, select your video files, and hit "Render". Batch Buddy AE handles directory writing, asset copying, expression updates, and After Effects CLI subprocess control automatically.
+
+---
+
+## UI Architecture & Modernization
+
+Batch Buddy AE features a hybrid AppKit/SwiftUI user interface designed for macOS 11.0+. While legacy features and custom tables remain powered by AppKit for compatibility, primary screens are progressively refactored to SwiftUI.
+
+### BBAEProjectVC Hybrid Architecture
+
+The project detail view (`BBAEProjectVC`) is implemented as a hybrid layout:
+1. **SwiftUI Hosting Layer**: In `viewDidLoad`, all storyboard-loaded views except the main table scroll view are removed, and a SwiftUI root view (`BBAEProjectView`) is embedded dynamically via `NSHostingView`.
+2. **UMUIControls Integration**: The SwiftUI layer uses components from the custom `UMUIControls` package to deliver a compact, dense macOS native interface:
+   - `UMUITextField` for search queries.
+   - `UMUICapsuleButton` controls for action triggers (e.g., adding items, project settings, rendering).
+   - `UMUIMiniSwitch` for batch toggles like "Render All".
+3. **AppKit Table Wrapper**: The AppKit-based table view (`UMTableView`) and its custom cell adapters (`BBAERecordCell`, `BBAERecordCompactRow`) are preserved and wrapped within SwiftUI using `NSViewRepresentable` (`TableViewContainer`). This guarantees perfect backward compatibility with existing storyboards, context menus, and custom row height computation.
+
