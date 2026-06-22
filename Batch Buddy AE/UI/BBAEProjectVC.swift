@@ -14,18 +14,14 @@ class BBAEProjectVC :	UMViewController, ObservableObject {
 	
 	static let storyboardId = 	"BBAEProjectVC"
 	
-	// MARK: - UI Elements
+	// MARK: - Legacy IBOutlets (retained for storyboard compatibility)
 	@IBOutlet weak var srcSearch: UMSearchField?
 	@IBOutlet weak var popTemplateList: UMPopUpButton?
 	@IBOutlet weak var btnShowToRender: NSButton?
-	@IBOutlet weak var tblRecordList: UMTableView?
 	@IBOutlet weak var chkRenderAll: UMCheckButton?
 	@IBOutlet weak var lblItemsCount: NSTextField?
 	@IBOutlet weak var lblStatus: NSTextField?
 	@IBOutlet var mnuCtxRender: NSMenu!
-	
-	@IBOutlet weak var cnsTableLeading: NSLayoutConstraint?
-	@IBOutlet weak var cnsTableTrailing: NSLayoutConstraint?
 	
 	// MARK: - Vars
 	var project :		BBAEProject!
@@ -47,8 +43,28 @@ class BBAEProjectVC :	UMViewController, ObservableObject {
 	@Published var statusText: String = ""
 	@Published var renderAll: Bool = false
 	
-	var strongScrollView: NSScrollView?
+	/// Bumped to force `BBAERecordListView` to re-render (e.g. after add/remove).
+	@Published var listRefreshId = UUID()
 	
+	// MARK: - Record Store Cache
+	/// Caches `BBAERecordObservable` per record ID so observers survive list refreshes.
+	private var storeCache: [String: BBAERecordObservable] = [:]
+	
+	func storeFor(record: BBAERecord) -> BBAERecordObservable {
+		if let existing = storeCache[record.id] {
+			return existing
+		}
+		let store = BBAERecordObservable(record: record, project: project)
+		storeCache[record.id] = store
+		return store
+	}
+	
+	private func pruneStoreCache() {
+		let activeIds = Set(project.recordList.map { $0.id })
+		storeCache = storeCache.filter { activeIds.contains($0.key) }
+	}
+	
+	// MARK: - Filter
 	func itemFoundList () -> [BBAERecord] {
 		var itemInstanceListFilteredByTemplate = searchComp == "*"
 			? project.recordList
@@ -64,14 +80,6 @@ class BBAEProjectVC :	UMViewController, ObservableObject {
 	}
 	
 	// MARK: - Display
-	func displayButtonToBeRenderedOnly () {
-		XMain.execute { [self] in
-			if let btn = btnShowToRender {
-				btn.image = Draw.getImage (showToBeRenderedOnly ? "Icon_Render_00001" : "Icon_Render_00000")
-			}
-		}
-	}
-	
 	func populateTemplate () {
 		popTemplateList?.clear ()
 		popTemplateList?.addItem (title: "All Comp Templates",
@@ -80,7 +88,7 @@ class BBAEProjectVC :	UMViewController, ObservableObject {
 		if let compList = project?.compList {
 			for template in compList {
 				popTemplateList?.addItem (title: template.name,
-										 value: template.id)
+										value: template.id)
 			}
 		}
 		popTemplateList?.setValueAsString (value: "*")
@@ -90,43 +98,6 @@ class BBAEProjectVC :	UMViewController, ObservableObject {
 			self?.performSearch ()
 		}
 	}
-	
-	// MARK: - table
-	func setupTable () {
-		tblRecordList?.rowCount = {
-			self.itemFoundList ().count
-		}
-		tblRecordList?.registerCell (cellId: "BBAERecordCell")
-		tblRecordList?.registerCell (cellId: BBAERecordCompactRow.cellId)
-		tblRecordList?.cellHandler = { [self] row in
-			let found = itemFoundList ()
-			guard row < found.count else { return nil }
-			if let table = tblRecordList {
-				if found [row].displayMode == .normal {
-					return BBAERecordCell.getCell (table,
-												   record: found [row],
-												   project: project,
-												   fatherController: self,
-												   delegate: self)
-				} else {
-					return BBAERecordCompactRow.getCell (table,
-														   record: found [row],
-														   project: project,
-														   fatherController: self,
-														   delegate: self)
-				}
-			}
-			return nil
-		}
-		tblRecordList?.cellHeight = { [self] row in
-			let record = itemFoundList () [row]
-			return record.displayMode == .normal ? record.cellHeight () : 28
-		}
-	}
-	
-//	func setupProjectMissingWarning () {
-//		imgProjectMissingWarning.isHidden = bbaeProject.aepFilePresent ()
-//	}
 	
 	func displatItemsCount () {
 		let countText = "Items: \(self.itemFoundList ().count)/\(project.recordList.count) (\((project.recordList.filter { $0.status == .toBeRendered }).count ) to be rendered)"
@@ -161,13 +132,14 @@ class BBAEProjectVC :	UMViewController, ObservableObject {
 			self.statusText = ""
 			lblStatus?.setValue ("")
 		}
-		displayButtonToBeRenderedOnly ()
 	}
 	
 	func updateLiveData () {
-		tblRecordList?.reloadDataInMainThread ()
-		displayButtonToBeRenderedOnly ()
-		displatItemsCount ()
+		pruneStoreCache()
+		XMain.execute { [weak self] in
+			self?.listRefreshId = UUID()
+			self?.displatItemsCount()
+		}
 	}
 	
 	// MARK: - Observer
@@ -175,14 +147,12 @@ class BBAEProjectVC :	UMViewController, ObservableObject {
 		project.observeUpdate (observerId: vcObserverId) { [weak self] in
 			self?.updateLiveData ()
 			self?.displayData ()
-			self?.displayButtonToBeRenderedOnly ()
 		}
 		UMNotify.observeString (keyword: project.statusUpdateKey) { [weak self] status in
 			XMain.execute {
 				self?.statusText = status ?? ""
 			}
 			self?.lblStatus?.setValue (status)
-			self?.displayButtonToBeRenderedOnly ()
 		}
 	}
 	
@@ -190,22 +160,12 @@ class BBAEProjectVC :	UMViewController, ObservableObject {
 	override func viewDidLoad () {
 		super.viewDidLoad ()
 		
-		// Capture and retain the scroll view of the table view
-		self.strongScrollView = tblRecordList?.enclosingScrollView
+		// Remove all storyboard subviews and install the SwiftUI hosting view
+		self.view.subviews.forEach { $0.removeFromSuperview() }
 		
-		// Remove all existing subviews loaded from the storyboard to prevent overlapping!
-		self.view.subviews.forEach { subview in
-			if subview != strongScrollView {
-				subview.removeFromSuperview ()
-			}
-		}
-		
-		// Seamlessly embed the modern SwiftUI View inside NSHostingView
 		let hostingView = NSHostingView (rootView: BBAEProjectView (vc: self))
 		hostingView.translatesAutoresizingMaskIntoConstraints = false
-		
 		self.view.addSubview (hostingView)
-		
 		NSLayoutConstraint.activate ([
 			hostingView.leadingAnchor.constraint (equalTo: self.view.leadingAnchor),
 			hostingView.trailingAnchor.constraint (equalTo: self.view.trailingAnchor),
@@ -215,21 +175,13 @@ class BBAEProjectVC :	UMViewController, ObservableObject {
 	}
 
 	override func willAppear () {
-		setupTable ()
 		displayData ()
-		tblRecordList?.reloadData ()
 		setupObservers ()
 		if isNew {
 			isNew = false
 			BBAEProjectSettingsVC.showSheet (currentController: self,
-											 project: project)
+											project: project)
 		}
-		
-		if #available(OSX 11.0, *) {
-			cnsTableLeading?.constant = 0
-			cnsTableTrailing?.constant = 0
-		}
-		tblRecordList?.addRoundedBackground (color: NSColor (deviceWhite: 0.15, alpha: 1))
 	}
 	
 	override func appeared () {
@@ -250,8 +202,8 @@ Would you like me to search it?
 """,
 								button0Txt: "No, Thanks, Later",
 								button1Txt: "Yes, continue") {
-//				BBAESettingsVC.showWindow (goToTab: .rendering)
-				AERenderSearcherVC.showWindow ()
+//			BBAESettingsVC.showWindow (goToTab: .rendering)
+			AERenderSearcherVC.showWindow ()
 			}
 		}
 	}
@@ -300,7 +252,6 @@ Would you like me to search it?
 		project.recordList.append (newRecord)
 		project.save ()
 		updateLiveData ()
-		tblRecordList?.scroll (toRow: project.recordList.count - 1)
 	}
 	
 	@IBAction func btnRenderPressed (_ sender: Any) {
@@ -345,7 +296,7 @@ Would you like me to search it?
 			project.openAEproject ()
 		} else {
 			BBAEProjectSettingsVC.showSheet (currentController: self,
-											 project: project)
+											project: project)
 		}
 	}
 	
@@ -358,9 +309,23 @@ Would you like me to search it?
 		displayMode = displayMode == .normal ? .compact : .normal
 		project.setDisplayModeForAllRecord (displayMode)
 		project.notifyUpdate ()
+		updateLiveData ()
 	}
 	
+	// MARK: - Record CRUD (called from SwiftUI cells)
 	
+	func removeRecordFromList(_ id: String) {
+		project.recordList.removeAll { $0.id == id }
+		storeCache.removeValue(forKey: id)
+		project.save()
+		updateLiveData()
+	}
+	
+	func duplicateRecordInList(_ id: String) {
+		project.duplicateItem(id)
+		project.save()
+		updateLiveData()
+	}
 	
 	// MARK: - CTX menu Render
 	var currentRecord :	BBAERecord?
@@ -376,111 +341,16 @@ Would you like me to search it?
 	
 	@IBAction func ctxMenuToRender (_ sender: Any) {
 		guard let currentRecord = currentRecord else { return }
-//		if currentItem.status == .rendered || currentItem.status == .dontRender {
 		currentRecord.status = .toBeRendered
-//		}
 		self.currentRecord = nil
 		updateLiveData ()
 	}
 
-}
-
-
-// MARK: - BBAEInstanceCellDelegate
-extension BBAEProjectVC :	BBAERecordCellDelegate {
-
-	func updateRecord () {
-		project.save ()
-		updateLiveData ()
-	}
-	
-	func removeRecord (_ id: String) {
-		project.recordList.removeAll { $0.id == id }
-		project.save ()
-		updateLiveData ()
-	}
-	
-	func displayInstanceCtxMenu (item :				BBAERecord,
-								 button sender :	NSButton) {
-		currentRecord = item
-		if let event = NSApplication.shared.currentEvent {
-			NSMenu.popUpContextMenu (mnuCtxRender,
-									 with: event,
-									 for: sender)
-		}
-	}
-	
-	func renderRecord (item: BBAERecord) {
-		Queue.execute { [self] in
-			guard License.licenseValidated else {
-				XMain.execute (after: 0.5 ){
-					UMAlert.ok (message: "Warning",
-								informativeText: "Unlicensed.")
-				}
-				return
-			}
-			BBAERenderingVC.showSheet (currentController: self)
-			item.status = .rendering
-			project.notifyUpdate ()
-			updateLiveData ()
-			project.renderRecord (item) { success, error in
-				BBAERenderingVC.hide ()
-				item.status = success
-					? .rendered
-					: .toBeRendered
-				self.updateLiveData ()
-				if !success {
-					XMain.execute (after: 0.5) {
-						UMAlert.ok (message: "After Effects Render Error",
-									informativeText: error)
-					}
-				}
-			}
-		}
-		self.currentRecord = nil
-	}
-	
-	func renderPlaceholderInstance (item: BBAERecord) {
-		Queue.execute { [self] in
-			item.status = .rendering
-			project.notifyUpdate ()
-			updateLiveData ()
-			project.renderPlaceholderItem (item) { value in
-				item.status = value
-					? .rendered
-					: .toBeRendered
-				self.updateLiveData ()
-			}
-		}
-		self.currentRecord = nil
-	}
-	
-	func duplicateRecord (_ id: String) {
-		project.duplicateItem (id)
-		project.save ()
-		updateLiveData ()
-		tblRecordList?.scroll (toRow: project.recordList.count - 1)
-	}
-}
-
-
-// MARK: - BBAEProjectItemCellDelegate
-extension BBAEProjectVC :BBAEProjectItemCellDelegate {
-
-	func removeItem (bbaeItem: BBAERecord) {
-		project.recordList = project.recordList.filter { $0.id != bbaeItem.id }
-		project.save ()
-		updateLiveData ()
-	}
-	
-	func updateItem (bbaeItem: BBAERecord) {
-		updateLiveData ()
-	}
 }
 
 
 extension BBAEProjectVC :	NSTextDelegate,
-							 NSSearchFieldDelegate {
+							NSSearchFieldDelegate {
 	
 	func performSearch () {
 		if let src = srcSearch {
@@ -506,42 +376,24 @@ extension BBAEProjectVC :	NSTextDelegate,
 	}
 }
 
-// MARK: - SwiftUI Views
+// MARK: - SwiftUI Root View
 struct BBAEProjectView : View {
 	@ObservedObject var vc: BBAEProjectVC
 	
 	var body: some View {
 		VStack(spacing: 0) {
-			// Header Area
 			BBAEProjectHeaderView(vc: vc)
 			
-			// Main Content - TableView wrapped in NSViewRepresentable
-			if let scrollView = vc.strongScrollView {
-				TableViewContainer(scrollView: scrollView)
-			} else {
-				Color.clear
-			}
+			BBAERecordListView(vc: vc)
+				.frame(maxWidth: .infinity, maxHeight: .infinity)
 			
-			// Footer Area
 			BBAEProjectFooterView(vc: vc)
 		}
-		.background(Color.darkGray)
+		.background(Color(nsColor: NSColor(deviceWhite: 0.13, alpha: 1)))
 	}
 }
 
-struct TableViewContainer: NSViewRepresentable {
-	let scrollView: NSScrollView
-	
-	func makeNSView(context: Context) -> NSScrollView {
-		scrollView.removeFromSuperview()
-		return scrollView
-	}
-	
-	func updateNSView(_ nsView: NSScrollView, context: Context) {
-		// Handled internally by AppKit table cell handlers
-	}
-}
-
+// MARK: - Header View
 struct BBAEProjectHeaderView: View {
 	@ObservedObject var vc: BBAEProjectVC
 	
@@ -630,6 +482,7 @@ struct BBAEProjectHeaderView: View {
 	}
 }
 
+// MARK: - Footer View
 struct BBAEProjectFooterView: View {
 	@ObservedObject var vc: BBAEProjectVC
 	

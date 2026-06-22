@@ -108,6 +108,10 @@
 		87E6B85A275DFD280039743D /* BBAETemplateStructureRecordIdCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87E6B859275DFD280039743D /* BBAETemplateStructureRecordIdCell.swift */; };
 		87E7A4C327899CA4007421E2 /* BBAETemplateStructureNumericCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87E7A4C227899CA4007421E2 /* BBAETemplateStructureNumericCell.swift */; };
 		87EF26122788298A00362033 /* BBAETemplateStructureNumericCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 87EF26112788298A00362033 /* BBAETemplateStructureNumericCell.xib */; };
+		AA0001AA3000000000000001 /* BBAERecordObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0001AA2000000000000001 /* BBAERecordObservable.swift */; };
+		AA0001AA3000000000000002 /* BBAEFieldRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0001AA2000000000000002 /* BBAEFieldRowView.swift */; };
+		AA0001AA3000000000000003 /* BBAERecordRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0001AA2000000000000003 /* BBAERecordRowView.swift */; };
+		AA0001AA3000000000000004 /* BBAERecordListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0001AA2000000000000004 /* BBAERecordListView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -228,6 +232,10 @@
 		87E7A4C227899CA4007421E2 /* BBAETemplateStructureNumericCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BBAETemplateStructureNumericCell.swift; sourceTree = "<group>"; };
 		87ED67F227860C2000DDBC15 /* UMAudio.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = UMAudio.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		87EF26112788298A00362033 /* BBAETemplateStructureNumericCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BBAETemplateStructureNumericCell.xib; sourceTree = "<group>"; };
+		AA0001AA2000000000000001 /* BBAERecordObservable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BBAERecordObservable.swift; sourceTree = "<group>"; };
+		AA0001AA2000000000000002 /* BBAEFieldRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BBAEFieldRowView.swift; sourceTree = "<group>"; };
+		AA0001AA2000000000000003 /* BBAERecordRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BBAERecordRowView.swift; sourceTree = "<group>"; };
+		AA0001AA2000000000000004 /* BBAERecordListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BBAERecordListView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -384,6 +392,10 @@
 				87566C6926B2C2410078A413 /* BBAERecordVC.swift */,
 				87DB66B227B112A00042F33C /* BBAERecordCompactRow.xib */,
 				87DB66B427B114950042F33C /* BBAERecordCompactRow.swift */,
+				AA0001AA2000000000000001 /* BBAERecordObservable.swift */,
+				AA0001AA2000000000000002 /* BBAEFieldRowView.swift */,
+				AA0001AA2000000000000003 /* BBAERecordRowView.swift */,
+				AA0001AA2000000000000004 /* BBAERecordListView.swift */,
 			);
 			path = Record;
 			sourceTree = "<group>";
@@ -634,6 +646,10 @@
 				87E7A4C327899CA4007421E2 /* BBAETemplateStructureNumericCell.swift in Sources */,
 				8714454E263318AD0092B564 /* BBAEProjectTemplateListCell-v2.swift in Sources */,
 				87BD26EB26EC7A9700B14503 /* BBAEProjectSettingsVC.swift in Sources */,
+				AA0001AA3000000000000001 /* BBAERecordObservable.swift in Sources */,
+				AA0001AA3000000000000002 /* BBAEFieldRowView.swift in Sources */,
+				AA0001AA3000000000000003 /* BBAERecordRowView.swift in Sources */,
+				AA0001AA3000000000000004 /* BBAERecordListView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
