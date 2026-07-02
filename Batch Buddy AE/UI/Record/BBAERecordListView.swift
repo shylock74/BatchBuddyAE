@@ -34,8 +34,7 @@ struct BBAERecordListView: View {
                 }
             }
         }
-        .background(Color(nsColor: NSColor(deviceWhite: 0.13, alpha: 1)))
-        .id(vc.listRefreshId)
+        .background(Color(NSColor(deviceWhite: 0.13, alpha: 1)))
     }
 
     private var emptyState: some View {

@@ -47,7 +47,6 @@ struct BBAERecordRowView: View {
             Divider()
                 .background(Color.gray.opacity(0.15))
         }
-        .id(store.refreshToken)
         .onChange(of: store.refreshToken) { _ in
             syncState()
         }
@@ -95,15 +94,16 @@ struct BBAERecordRowView: View {
                     store.commitSilent()
                 }
             ))
+            .controlSize(.mini)
 
             // Quick render button
-            UMUICapsuleButton(systemImage: "play.fill", style: .accent, size: .small) {
+            UMUICapsuleButton("", systemImage: "play.fill", style: .accent, size: .small) {
                 renderRecord()
             }
             .fixedSize()
 
             // Expand to normal
-            UMUICapsuleButton(systemImage: "chevron.down", style: .gray, size: .small) {
+            UMUICapsuleButton("", systemImage: "chevron.down", style: .gray, size: .small) {
                 store.record.displayMode = .normal
                 displayMode = .normal
                 store.commitSilent()
@@ -148,7 +148,7 @@ struct BBAERecordRowView: View {
                     }
                 }
                 .labelsHidden()
-                .frame(maxWidth: 180)
+                .frame(maxWidth: .infinity, alignment: .leading)
 
                 if !outputModuleText.isEmpty {
                     Text(outputModuleText)
@@ -178,6 +178,7 @@ struct BBAERecordRowView: View {
                         store.commitSilent()
                     }
                 ))
+                .controlSize(.mini)
             }
             .padding(.horizontal, 14)
             .padding(.top, 10)
@@ -185,7 +186,7 @@ struct BBAERecordRowView: View {
 
             // — Fields —
             if let template = store.project.getComp(withId: store.record.compId) {
-                VStack(spacing: 8) {
+                VStack(spacing: 2) {
                     let fields = template.fieldList
                     let values = store.record.recordFieldValueList
                     ForEach(Array(fields.enumerated()), id: \.element.id) { index, field in
@@ -201,12 +202,6 @@ struct BBAERecordRowView: View {
                                 }
                             )
                             .padding(.horizontal, 14)
-
-                            if index < fields.count - 1 {
-                                Divider()
-                                    .padding(.horizontal, 14)
-                                    .opacity(0.4)
-                            }
                         }
                     }
                 }

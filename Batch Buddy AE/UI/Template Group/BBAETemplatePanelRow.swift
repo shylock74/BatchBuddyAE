@@ -56,9 +56,7 @@ class BBAETemplatePanelRow :	UMTableCell {
 																	 y: BBAETemplatePanelRow.fieldY0),
 													size: CGSize (width: BBAETemplatePanelRow.longTextFieldWidth,
 																  height: 24)))
-		textField.setup (defaultValue: record.recordFieldValueList [i].textContent ?? "") { [weak self] newText in
-//			self?.instance.instanceItemList [i].textContent = newText
-//			self?.project.notifyUpdate ()
+		textField.setup (defaultValue: record.recordFieldValueList [i].textContent ?? "") { _ in
 		}
 		textField.isEditable = false
 		textField.font = NSFont.systemFont (ofSize: 10)
@@ -102,8 +100,7 @@ class BBAETemplatePanelRow :	UMTableCell {
 			self?.displayURLField (i)
 		}
 		let urlField = UMTextField (frame: f)
-		urlField.setup (defaultValue: record.recordFieldValueList [i].url?.lastPathComponent ?? "") { [weak self] newText in
-//			self?.instance.instanceItemList [i].valueContent = Double (newText)
+		urlField.setup (defaultValue: record.recordFieldValueList [i].url?.lastPathComponent ?? "") { _ in
 		}
 		urlField.font = NSFont.systemFont (ofSize: 10)
 		urlField.isEditable = false

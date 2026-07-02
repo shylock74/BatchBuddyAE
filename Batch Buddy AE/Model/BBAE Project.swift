@@ -558,7 +558,7 @@ class BBAEProject :    Codable {
 		}
 	}
 	
-	@UMDef (key: "lastProjectUrl", def: "") static var lastProjectUrl :	String
+	@UMDef(key: "lastProjectUrl", def: "") static var lastProjectUrl :	String
 	
 	static func startup (callback :	@escaping (BBAEProject) -> ()) {
 		guard lastProjectUrl != "" else { return }

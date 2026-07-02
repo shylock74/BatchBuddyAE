@@ -782,3 +782,18 @@ struct BBAETemplateListDetailPane: View {
 		}
 	}
 }
+
+// MARK: - Table View Container Representable
+
+struct TableViewContainer: NSViewRepresentable {
+	let scrollView: NSScrollView
+	
+	func makeNSView(context: Context) -> NSScrollView {
+		scrollView.removeFromSuperview()
+		return scrollView
+	}
+	
+	func updateNSView(_ nsView: NSScrollView, context: Context) {
+		// Handled internally by AppKit table cell handlers
+	}
+}

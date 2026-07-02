@@ -74,6 +74,7 @@ struct FieldRowView: View {
 									onModified()
 								}
 							))
+							.controlSize(.mini)
 						}
 						
 						TextEditor(text: Binding(
@@ -131,6 +132,7 @@ struct FieldRowView: View {
 								onModified()
 							}
 						))
+						.controlSize(.mini)
 					}
 				}
 				
@@ -204,6 +206,7 @@ struct FieldRowView: View {
 										onModified()
 									}
 								))
+								.controlSize(.mini)
 							}
 						}
 						
@@ -240,7 +243,8 @@ struct FieldRowView: View {
 				HStack(spacing: 8) {
 					Text((field.fieldName) + ":")
 						.font(.system(size: 11))
-					Spacer()
+						.frame(width: 100, alignment: .leading)
+					
 					UMUIMiniSwitch("", isOn: Binding(
 						get: { fieldValue.valueContent == 1 },
 						set: { val in
@@ -248,6 +252,9 @@ struct FieldRowView: View {
 							onModified()
 						}
 					))
+					.controlSize(.mini)
+					
+					Spacer()
 				}
 				
 			case .colorFill:
@@ -271,8 +278,6 @@ struct FieldRowView: View {
 					.labelsHidden()
 					.frame(width: 150)
 					
-					Spacer()
-					
 					if let colorId = fieldValue.colorId,
 					   let projectColor = project.getColor(colorId) {
 						Circle()
@@ -283,6 +288,8 @@ struct FieldRowView: View {
 							.fill(Color.black)
 							.frame(width: 18, height: 18)
 					}
+					
+					Spacer()
 				}
 				
 			case .image, .video, .audio, .vectorAI:
@@ -339,7 +346,7 @@ struct FieldRowView: View {
 				}
 			}
 		}
-		.padding(.vertical, 4)
+		.padding(.vertical, 1)
 	}
 	
 	private func allowedExtensionsForType(_ type: BBAECompField.FieldType) -> [String] {

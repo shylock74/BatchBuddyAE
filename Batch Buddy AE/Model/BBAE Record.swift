@@ -287,8 +287,8 @@ final class BBAERecord :   Codable,
 	var overrideRenderUrl :	URL? {
 		guard let comp = comp,
 			  comp.mediaInFieldList == true,
-			  let compMediaField = (comp.fieldList.first { $0.id == comp.overrideRenderFolder.mediaFieldId }),
-			  let recordField = (recordFieldValueList.first { $0.compFieldId == compMediaField.id }) else { return nil }
+			  let compMediaField = comp.fieldList.first(where: { $0.id == comp.overrideRenderFolder.mediaFieldId }),
+			  let recordField = recordFieldValueList.first(where: { $0.compFieldId == compMediaField.id }) else { return nil }
 		let mediaUrl = recordField.url
 		return mediaUrl?.parent
 	}

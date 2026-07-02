@@ -36,7 +36,7 @@ class BBAEProjectVC :	UMViewController, ObservableObject {
 	
 	static var currentProject :	BBAEProject?
 	
-	@UMDef (key: "firstLaunch", def: true) var firstlaunch
+	@UMDef(key: "firstLaunch", def: true) var firstlaunch
 
 	@Published var showToBeRenderedOnly =	false
 	@Published var itemsCountText: String = ""
@@ -389,7 +389,7 @@ struct BBAEProjectView : View {
 			
 			BBAEProjectFooterView(vc: vc)
 		}
-		.background(Color(nsColor: NSColor(deviceWhite: 0.13, alpha: 1)))
+		.background(Color(NSColor(deviceWhite: 0.13, alpha: 1)))
 	}
 }
 
@@ -528,7 +528,7 @@ struct BBAEProjectFooterView: View {
 			
 			Spacer()
 			
-			UMUICapsuleButton("Add Item", systemImage: "plus", style: .gray, size: .small) {
+			UMUICapsuleButton("New", systemImage: "plus", style: .gray, size: .small) {
 				vc.btnaddItemPressed(vc)
 			}
 			.fixedSize(horizontal: true, vertical: false)
@@ -538,17 +538,17 @@ struct BBAEProjectFooterView: View {
 			}
 			.fixedSize(horizontal: true, vertical: false)
 			
-			UMUICapsuleButton("Render Folder", systemImage: "folder", style: .gray, size: .small) {
+			UMUICapsuleButton("Output", systemImage: "folder", style: .gray, size: .small) {
 				vc.btnRenderFolderPressed(vc)
 			}
 			.fixedSize(horizontal: true, vertical: false)
 			
-			UMUICapsuleButton("Project Settings", systemImage: "gearshape", style: .gray, size: .small) {
+			UMUICapsuleButton("Project", systemImage: "gearshape", style: .gray, size: .small) {
 				vc.btnProjectSettingsPressed(vc)
 			}
 			.fixedSize(horizontal: true, vertical: false)
 			
-			UMUICapsuleButton("Render Comps", systemImage: "play.fill", style: .accent, size: .small) {
+			UMUICapsuleButton("Render", systemImage: "play.fill", style: .accent, size: .small) {
 				vc.btnRenderPressed(vc)
 			}
 			.fixedSize(horizontal: true, vertical: false)
