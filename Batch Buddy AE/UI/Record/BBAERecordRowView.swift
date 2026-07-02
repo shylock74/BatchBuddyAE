@@ -280,8 +280,10 @@ struct BBAERecordRowView: View {
             UMAlert.ok(message: "Alert", informativeText: "AERender not present.")
             return
         }
+        BBAERenderingVC.showSheet(currentController: vc)
         Queue.execute { [self] in
             guard License.licenseValidated else {
+                XMain.execute { BBAERenderingVC.hide() }
                 XMain.execute(after: 0.5) {
                     UMAlert.ok(message: "Warning", informativeText: "Unlicensed.")
                 }
@@ -293,11 +295,14 @@ struct BBAERecordRowView: View {
             } else {
                 store.project.toBeRenderedCount = 1
             }
+            BBAERenderingVC.setTotalCount(store.project.toBeRenderedCount)
+            
             let record = store.record
             let project = store.project
             record.status = .rendering
             project.notifyUpdate()
             project.renderRecord(record) { success, error in
+                XMain.execute { BBAERenderingVC.hide() }
                 record.status = success ? .rendered : .toBeRendered
                 XMain.execute { vc.updateLiveData() }
                 if !success {

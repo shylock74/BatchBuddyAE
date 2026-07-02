@@ -147,7 +147,11 @@ final class BBAERecordFieldValue :	Codable {
 		if type == .text || type == .longText {
 			return "\(varName) = \"\(formattedTextContent)\";\n"
 		}
-		if (type == .numericValue || type == .checkBox),
+		if type == .checkBox {
+			let val = valueContent ?? 0.0
+			return "\(varName) = \(val);\n"
+		}
+		if type == .numericValue,
 		   valueContentString != nil {
 			return "\(varName) = \(valueContentString!);\n"
 		}
