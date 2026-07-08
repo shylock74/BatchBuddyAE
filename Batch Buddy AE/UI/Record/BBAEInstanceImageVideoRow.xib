@@ -25,9 +25,9 @@
                     </textFieldCell>
                 </textField>
                 <customView translatesAutoresizingMaskIntoConstraints="NO" id="yCB-tx-SUM" customClass="UMDragArea" customModule="UMOmniaFramework">
-                    <rect key="frame" x="142" y="2" width="144" height="72"/>
+                    <rect key="frame" x="142" y="2" width="128" height="72"/>
                     <constraints>
-                        <constraint firstAttribute="width" secondItem="yCB-tx-SUM" secondAttribute="height" multiplier="2" id="QDV-gM-OcZ"/>
+                        <constraint firstAttribute="width" secondItem="yCB-tx-SUM" secondAttribute="height" multiplier="16:9" id="QDV-gM-OcZ"/>
                         <constraint firstAttribute="height" constant="72" id="f3O-yM-lNe"/>
                     </constraints>
                     <userDefinedRuntimeAttributes>
