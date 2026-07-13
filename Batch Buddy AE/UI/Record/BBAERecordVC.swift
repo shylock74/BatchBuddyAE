@@ -189,14 +189,14 @@ struct BBAERecordWindowView: View {
 			
 			// Footer Actions
 			HStack(spacing: 8) {
-				UMUICapsuleButton("Reveal", systemImage: "folder", style: .gray, size: .small) {
+				UMUIMiniButton("Reveal", systemImage: "folder", style: .gray) {
 					let renderFileUrl = store.project.renderFileUrl(store.record, templateGroup: nil, fileExtension: "")
 					fu_showInFinder(renderFileUrl.parent)
 				}
 				
 				Spacer()
 				
-				UMUICapsuleButton("OK", style: .accent, size: .small) {
+				UMUIMiniButton("OK", style: .accent) {
 					vc.close()
 				}
 				.frame(width: 80)

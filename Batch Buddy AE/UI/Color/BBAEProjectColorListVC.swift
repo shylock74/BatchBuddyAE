@@ -138,8 +138,10 @@ struct BBAEProjectColorListView: View {
 				
 				Spacer()
 				
-				UMUICapsuleButton("", systemImage: "plus", style: .accent, size: .small) {
+				UMUIMiniButton(style: .accent, action: {
 					vc.addColor()
+				}) {
+					Image(systemName: "plus")
 				}
 				.frame(width: 28)
 				.lineLimit(1)
@@ -166,7 +168,7 @@ struct BBAEProjectColorListView: View {
 			// Footer close button
 			HStack {
 				Spacer()
-				UMUICapsuleButton("OK", style: .accent, size: .small) {
+				UMUIMiniButton("OK", style: .accent) {
 					vc.close()
 				}
 				.frame(width: 80)
@@ -231,14 +233,14 @@ struct ColorListRow: View {
 			Spacer()
 			
 			// Copy HEX
-			UMUICapsuleButton("HEX", style: .gray, size: .small) {
+			UMUIMiniButton("HEX", style: .gray) {
 				UMPasteboard.setString(colorItem.hex)
 			}
 			.lineLimit(1)
 			.fixedSize()
 			
 			// Copy AE Expression Code
-			UMUICapsuleButton("AE Code", style: .gray, size: .small) {
+			UMUIMiniButton("AE Code", style: .gray) {
 				bbaeProject.saveColorFile(customAEProjectUrl: nil)
 				let code = BBAESettings.shared.getColorAECodeString(color: colorItem)
 				UMPasteboard.setString(code)
@@ -248,7 +250,7 @@ struct ColorListRow: View {
 			.fixedSize()
 			
 			// Copy AE Color Fill
-			UMUICapsuleButton("Fill", style: .gray, size: .small) {
+			UMUIMiniButton("Fill", style: .gray) {
 				bbaeProject.saveColorFile(customAEProjectUrl: nil)
 				let code = BBAESettings.shared.getColorFillString(color: colorItem)
 				UMPasteboard.setString(code)
@@ -258,8 +260,10 @@ struct ColorListRow: View {
 			.fixedSize()
 			
 			// Remove Button
-			UMUICapsuleButton("", systemImage: "trash", style: .gray, size: .small) {
+			UMUIMiniButton(style: .gray, action: {
 				vc.removeColor(bbaeColor: colorItem)
+			}) {
+				Image(systemName: "trash")
 			}
 			.lineLimit(1)
 			.fixedSize()

@@ -47,7 +47,7 @@ struct FieldRowView: View {
 						labelWidth: 0
 					)
 					
-					UMUICapsuleButton("Suggest", style: .gray, size: .small) {
+					UMUIMiniButton("Suggest", style: .gray) {
 						fieldValue.textContent = record.suggestedRecordID()
 						onModified()
 					}
@@ -221,14 +221,14 @@ struct FieldRowView: View {
 								
 								Spacer()
 								
-								UMUICapsuleButton("- \(field.numericFieldSettings.step.string)", style: .gray, size: .small) {
+								UMUIMiniButton("- \(field.numericFieldSettings.step.string)", style: .gray) {
 									fieldValue.valueContent = max((fieldValue.valueContent ?? 0) - field.numericFieldSettings.step, field.numericFieldSettings.minValue)
 									onModified()
 								}
 								.lineLimit(1)
 								.fixedSize()
 								
-								UMUICapsuleButton("+ \(field.numericFieldSettings.step.string)", style: .gray, size: .small) {
+								UMUIMiniButton("+ \(field.numericFieldSettings.step.string)", style: .gray) {
 									fieldValue.valueContent = min((fieldValue.valueContent ?? 0) + field.numericFieldSettings.step, field.numericFieldSettings.maxValue)
 									onModified()
 								}
@@ -293,55 +293,71 @@ struct FieldRowView: View {
 				}
 				
 			case .image, .video, .audio, .vectorAI:
-				VStack(alignment: .leading, spacing: 6) {
-					HStack {
+				HStack(alignment: .center, spacing: 8) {
+					HStack(spacing: 4) {
 						Image(nsImage: field.type.image)
 							.resizable()
 							.aspectRatio(contentMode: .fit)
 							.frame(width: 14, height: 14)
 						Text((field.fieldName) + ":")
 							.font(.system(size: 11))
-						Spacer()
 					}
-					HStack(spacing: 8) {
-						FileDropPreview(
-							url: fieldValue.url,
-							type: field.type,
-							allowedExtensions: allowedExtensionsForType(field.type)
-						) { newUrl in
-							fieldValue.url = newUrl
-							onModified()
-							Queue.execute {
-								record.prepareVideos(project: project)
-							}
+					.frame(width: 100, alignment: .leading)
+					
+					FileDropPreview(
+						url: fieldValue.url,
+						type: field.type,
+						allowedExtensions: allowedExtensionsForType(field.type)
+					) { newUrl in
+						fieldValue.url = newUrl
+						onModified()
+						Queue.execute {
+							record.prepareVideos(project: project)
 						}
-						
-						VStack(alignment: .leading, spacing: 4) {
-							Text(fieldValue.url?.lastPathComponent ?? "Drag File Here")
-								.font(.system(size: 11))
-								.foregroundColor(fieldValue.url == nil ? .secondary : .primary)
-								.lineLimit(1)
-								.truncationMode(.middle)
-							
-							if fieldValue.url != nil {
-								HStack(spacing: 8) {
-									UMUICapsuleButton("Reveal in Finder", style: .gray, size: .small) {
-										if let url = fieldValue.url {
-											fu_showInFinder(url)
-										}
-									}
+					}
+					
+					VStack(alignment: .leading, spacing: 4) {
+						if fieldValue.url != nil {
+							HStack(alignment: .center, spacing: 6) {
+								Text(fieldValue.url!.lastPathComponent)
+									.font(.system(size: 11))
+									.foregroundColor(.primary)
 									.lineLimit(1)
-									.fixedSize()
-									
-									UMUICapsuleButton("Remove", style: .gray, size: .small) {
-										fieldValue.url = nil
-										onModified()
+									.truncationMode(.middle)
+								
+								Button(action: {
+									if let url = fieldValue.url {
+										fu_showInFinder(url)
 									}
-									.lineLimit(1)
-									.fixedSize()
+								}) {
+									Image(systemName: "magnifyingglass")
+										.font(.system(size: 13, weight: .medium))
+										.foregroundColor(.secondary)
 								}
+								.buttonStyle(PlainButtonStyle())
+								.help("Reveal in Finder")
 							}
+						} else {
+							Text("Drag File Here")
+								.font(.system(size: 11))
+								.foregroundColor(.secondary)
+								.lineLimit(1)
 						}
+					}
+					Spacer()
+					
+					if fieldValue.url != nil {
+						Button(action: {
+							fieldValue.url = nil
+							onModified()
+						}) {
+							Image(systemName: "trash")
+								.font(.system(size: 14, weight: .medium))
+								.foregroundColor(.red.opacity(0.8))
+						}
+						.buttonStyle(PlainButtonStyle())
+						.help("Remove")
+						.padding(.trailing, 4)
 					}
 				}
 			}
@@ -374,26 +390,30 @@ struct FileDropPreview: View {
 	
 	var body: some View {
 		ZStack {
+			RoundedRectangle(cornerRadius: 4)
+				.fill(isTargeted ? Color.accentColor.opacity(0.15) : Color.black.opacity(0.3)) // "pozzo" background
+            
+            CheckerboardPattern()
+                .opacity(0.1)
+                .clipShape(RoundedRectangle(cornerRadius: 4))
+			
 			if let img = thumbnail {
 				Image(nsImage: img)
 					.resizable()
 					.aspectRatio(contentMode: .fit)
-					.frame(width: 80, height: 80)
-					.cornerRadius(4)
+					.frame(maxWidth: .infinity, maxHeight: .infinity)
+					.padding(2)
 			} else {
-				RoundedRectangle(cornerRadius: 4)
-					.fill(isTargeted ? Color.accentColor.opacity(0.15) : Color.black.opacity(0.1))
-					.frame(width: 80, height: 80)
-				
 				Image(systemName: placeholderIconName(type))
 					.font(.system(size: 24))
 					.foregroundColor(.secondary)
 			}
 		}
-		.frame(width: 80, height: 80)
+		.frame(width: 144, height: 81) // 16:9 aspect ratio
+		.clipShape(RoundedRectangle(cornerRadius: 4))
 		.overlay(
 			RoundedRectangle(cornerRadius: 4)
-				.stroke(isTargeted ? Color.accentColor : Color.gray.opacity(0.2), lineWidth: isTargeted ? 2 : 1)
+				.stroke(isTargeted ? Color.accentColor : Color.gray.opacity(0.3), lineWidth: isTargeted ? 2 : 1)
 		)
 		.onTapGesture {
 			browseFile()
@@ -454,7 +474,7 @@ struct FileDropPreview: View {
 					kCGImageSourceCreateThumbnailWithTransform: true,
 					kCGImageSourceThumbnailMaxPixelSize: 160
 				   ] as CFDictionary) {
-					img = NSImage(cgImage: downsampledImage, size: CGSize(width: 80, height: 80))
+					img = NSImage(cgImage: downsampledImage, size: .zero)
 				} else {
 					img = NSImage(contentsOf: url)
 				}
@@ -483,3 +503,34 @@ struct FileDropPreview: View {
 		}
 	}
 }
+
+// MARK: - Checkerboard Pattern
+
+struct CheckerboardPattern: View {
+    var squareSize: CGFloat = 8
+    
+    var body: some View {
+        GeometryReader { geometry in
+            ZStack {
+                Color.black.opacity(0.4)
+                
+                Path { path in
+                    let columns = Int(geometry.size.width / squareSize) + 1
+                    let rows = Int(geometry.size.height / squareSize) + 1
+                    for row in 0..<rows {
+                        for col in 0..<columns {
+                            if (row + col).isMultiple(of: 2) {
+                                path.addRect(CGRect(x: CGFloat(col) * squareSize, 
+                                                    y: CGFloat(row) * squareSize, 
+                                                    width: squareSize, 
+                                                    height: squareSize))
+                            }
+                        }
+                    }
+                }
+                .fill(Color.white.opacity(0.4))
+            }
+        }
+    }
+}
+

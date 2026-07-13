@@ -111,8 +111,10 @@ struct BBAEProjectTemplateListView: View {
 				
 				Spacer()
 				
-				UMUICapsuleButton("", systemImage: "plus", style: .accent, size: .small) {
+				UMUIMiniButton(style: .accent, action: {
 					vc.addTemplate()
+				}) {
+					Image(systemName: "plus")
 				}
 				.frame(width: 28)
 				.lineLimit(1)
@@ -139,7 +141,7 @@ struct BBAEProjectTemplateListView: View {
 			// Footer
 			HStack {
 				Spacer()
-				UMUICapsuleButton("OK", style: .accent, size: .small) {
+				UMUIMiniButton("OK", style: .accent) {
 					vc.close()
 				}
 				.frame(width: 80)
@@ -201,14 +203,18 @@ struct TemplateRowView: View {
 				Spacer()
 				
 				// Actions
-				UMUICapsuleButton("", systemImage: "plus.on.plus", style: .gray, size: .small) {
+				UMUIMiniButton(style: .gray, action: {
 					vc.duplicateTemplate(bbaeTemplate: comp)
+				}) {
+					Image(systemName: "plus.on.plus")
 				}
 				.lineLimit(1)
 				.fixedSize()
 				
-				UMUICapsuleButton("", systemImage: "trash", style: .gray, size: .small) {
+				UMUIMiniButton(style: .gray, action: {
 					vc.removeTemplate(bbaeTemplate: comp)
+				}) {
+					Image(systemName: "trash")
 				}
 				.lineLimit(1)
 				.fixedSize()

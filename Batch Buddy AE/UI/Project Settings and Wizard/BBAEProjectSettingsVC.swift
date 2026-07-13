@@ -213,7 +213,7 @@ struct BBAEProjectSettingsView: View {
 							
 							HStack(spacing: 8) {
 								Spacer()
-								UMUICapsuleButton("Open in After Effects", style: .gray, size: .small) {
+								UMUIMiniButton("Open in After Effects", style: .gray) {
 									if let url = vc.project.aeProjectFileUrl {
 										fu_openFileWithItsApp(url)
 									}
@@ -221,7 +221,7 @@ struct BBAEProjectSettingsView: View {
 								.lineLimit(1)
 								.fixedSize()
 								
-								UMUICapsuleButton("Reveal in Finder", style: .gray, size: .small) {
+								UMUIMiniButton("Reveal in Finder", style: .gray) {
 									if let url = vc.project.aeProjectFileUrl {
 										fu_showInFinder(url)
 									}
@@ -242,7 +242,7 @@ struct BBAEProjectSettingsView: View {
 									.font(.system(size: 11))
 									.frame(width: 120, alignment: .leading)
 								
-								UMUICapsuleButton(renderFolderTitle, style: .gray, size: .small) {
+								UMUIMiniButton(renderFolderTitle, style: .gray) {
 									vc.selectRenderFolder()
 								}
 								.lineLimit(1)
@@ -346,7 +346,7 @@ struct BBAEProjectSettingsView: View {
 								Spacer()
 								
 								if !customAERenderPath.isEmpty {
-									UMUICapsuleButton("Clear Custom Engine", style: .gray, size: .small) {
+									UMUIMiniButton("Clear Custom Engine", style: .gray) {
 										vc.clearCustomAERender()
 										refreshData()
 									}
@@ -363,7 +363,7 @@ struct BBAEProjectSettingsView: View {
 					UMUISection("Project Maintenance") {
 						HStack {
 							Spacer()
-							UMUICapsuleButton("Remove All Records", style: .gray, size: .small) {
+							UMUIMiniButton("Remove All Records", style: .gray) {
 								vc.removeAllRecords()
 							}
 							.lineLimit(1)
@@ -382,7 +382,7 @@ struct BBAEProjectSettingsView: View {
 			// Footer OK button
 			HStack {
 				Spacer()
-				UMUICapsuleButton("OK", style: .accent, size: .small) {
+				UMUIMiniButton("OK", style: .accent) {
 					vc.close()
 				}
 				.frame(width: 80)

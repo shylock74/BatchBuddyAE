@@ -525,10 +525,10 @@ struct BBAETemplateListView : View {
 			// Bottom Bar (Cancel / OK)
 			HStack {
 				Spacer()
-				UMUICapsuleButton("Cancel", style: .gray, size: .small) {
+				UMUIMiniButton("Cancel", style: .gray) {
 					vc.btnCancelPressed(vc)
 				}
-				UMUICapsuleButton("OK", style: .accent, size: .small) {
+				UMUIMiniButton("OK", style: .accent) {
 					vc.btnOkPressed(vc)
 				}
 			}
@@ -562,12 +562,12 @@ struct BBAETemplateListMasterPane: View {
 			
 			// Master Toolbar
 			HStack(spacing: 8) {
-				UMUICapsuleButton("Add", systemImage: "plus", style: .gray, size: .small) {
+				UMUIMiniButton("Add", systemImage: "plus", style: .gray) {
 					vc.btAddTemplate(vc)
 				}
 				.fixedSize(horizontal: true, vertical: false)
 				
-				UMUICapsuleButton("Import", systemImage: "square.and.arrow.down", style: .gray, size: .small) {
+				UMUIMiniButton("Import", systemImage: "square.and.arrow.down", style: .gray) {
 					vc.btnImportCompTemplatePressed(vc)
 				}
 				.fixedSize(horizontal: true, vertical: false)
@@ -647,7 +647,7 @@ struct BBAETemplateListDetailPane: View {
 										.font(.system(size: 11, weight: .semibold))
 										.foregroundColor(.secondary)
 									
-									UMUICapsuleButton("Group List", systemImage: "list.bullet.indent", style: .gray, size: .small) {
+									UMUIMiniButton("Group List", systemImage: "list.bullet.indent", style: .gray) {
 										vc.btnTemplateGroupListPressed(vc)
 									}
 									.fixedSize(horizontal: true, vertical: false)
@@ -695,10 +695,9 @@ struct BBAETemplateListDetailPane: View {
 							Divider()
 							
 							HStack {
-								UMUICapsuleButton(
+								UMUIMiniButton(
 									"Custom AE Project" + (comp.customAEProjectUrl != nil ? " (YES)" : ""),
-									style: comp.customAEProjectUrl != nil ? .accent : .gray,
-									size: .small
+									style: comp.customAEProjectUrl != nil ? .accent : .gray
 								) {
 									vc.btncustomAERenderPressed(vc)
 								}
@@ -749,12 +748,12 @@ struct BBAETemplateListDetailPane: View {
 							}
 							.fixedSize(horizontal: true, vertical: false)
 							
-							UMUICapsuleButton("Settings", systemImage: "gearshape", style: .gray, size: .small) {
+							UMUIMiniButton("Settings", systemImage: "gearshape", style: .gray) {
 								vc.btnTemplateSettingsPressed(vc)
 							}
 							.fixedSize(horizontal: true, vertical: false)
 							
-							UMUICapsuleButton("Export", systemImage: "square.and.arrow.up", style: .gray, size: .small) {
+							UMUIMiniButton("Export", systemImage: "square.and.arrow.up", style: .gray) {
 								vc.btnExportCompTemplatePressed(vc)
 							}
 							.fixedSize(horizontal: true, vertical: false)

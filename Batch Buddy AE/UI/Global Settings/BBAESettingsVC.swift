@@ -136,7 +136,7 @@ struct BBAESettingsView: View {
 			// Footer close button
 			HStack {
 				Spacer()
-				UMUICapsuleButton("OK", style: .accent, size: .small) {
+				UMUIMiniButton("OK", style: .accent) {
 					vc.close()
 				}
 				.frame(width: 80)
@@ -261,10 +261,9 @@ struct BBAESettingsRenderingView: View {
 							.font(.system(size: 11))
 							.frame(width: 120, alignment: .leading)
 						
-						UMUICapsuleButton(
+						UMUIMiniButton(
 							engineButtonTitle,
-							style: engineExists ? .gray : .accent,
-							size: .small
+							style: engineExists ? .gray : .accent
 						) {
 							AERenderSearcherVC.showWindow()
 						}
@@ -308,8 +307,10 @@ struct BBAESettingsRenderingView: View {
 						
 						Spacer()
 						
-						UMUICapsuleButton("", systemImage: "gearshape", style: .gray, size: .small) {
+						UMUIMiniButton(style: .gray, action: {
 							vc.openRenderSettingsSheet()
+						}) {
+							Image(systemName: "gearshape")
 						}
 						.frame(width: 24)
 						.lineLimit(1)
@@ -341,8 +342,10 @@ struct BBAESettingsRenderingView: View {
 						
 						Spacer()
 						
-						UMUICapsuleButton("", systemImage: "gearshape", style: .gray, size: .small) {
+						UMUIMiniButton(style: .gray, action: {
 							vc.openOutputModuleSheet()
+						}) {
+							Image(systemName: "gearshape")
 						}
 						.frame(width: 24)
 						.lineLimit(1)

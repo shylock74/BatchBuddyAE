@@ -26,6 +26,10 @@ struct BBAERecordRowView: View {
     @State private var outputModuleText: String
     @State private var displayMode: BBAERecord.DisplayMode
 
+    // Aesthetic additions
+    @State private var isHovered: Bool = false
+    @State private var isPulsing: Bool = false
+
     init(store: BBAERecordObservable, vc: BBAEProjectVC) {
         self.store = store
         self.vc = vc
@@ -43,9 +47,18 @@ struct BBAERecordRowView: View {
             } else {
                 normalRow
             }
-
-            Divider()
-                .background(Color.gray.opacity(0.15))
+        }
+        .background(backgroundForStatus(store.record.status, isHovered: isHovered))
+        .cornerRadius(10)
+        .overlay(
+            RoundedRectangle(cornerRadius: 10)
+                .stroke(Color.white.opacity(0.08), lineWidth: 1)
+        )
+        .padding(.horizontal, 12)
+        .onHover { hovering in
+            withAnimation(.easeInOut(duration: 0.15)) {
+                self.isHovered = hovering
+            }
         }
         .onChange(of: store.refreshToken) { _ in
             syncState()
@@ -77,13 +90,14 @@ struct BBAERecordRowView: View {
             Spacer()
 
             // Status label
-            Text(store.record.status.displayString())
-                .font(.system(size: 10, weight: .semibold))
+            Text(store.record.status.displayString().uppercased())
+                .font(.system(size: 9, weight: .bold))
+                .tracking(1)
                 .foregroundColor(statusColor(store.record.status))
-                .padding(.horizontal, 6)
-                .padding(.vertical, 2)
-                .background(statusColor(store.record.status).opacity(0.12))
-                .cornerRadius(4)
+                .padding(.horizontal, 8)
+                .padding(.vertical, 4)
+                .background(statusColor(store.record.status).opacity(0.15))
+                .cornerRadius(6)
 
             // Render toggle
             UMUIMiniSwitch("", isOn: Binding(
@@ -97,22 +111,25 @@ struct BBAERecordRowView: View {
             .controlSize(.mini)
 
             // Quick render button
-            UMUICapsuleButton("", systemImage: "play.fill", style: .accent, size: .small) {
+            UMUIMiniButton(style: .accent, action: {
                 renderRecord()
+            }) {
+                Image(systemName: "play.fill")
             }
             .fixedSize()
 
             // Expand to normal
-            UMUICapsuleButton("", systemImage: "chevron.down", style: .gray, size: .small) {
+            UMUIMiniButton(style: .gray, action: {
                 store.record.displayMode = .normal
                 displayMode = .normal
                 store.commitSilent()
+            }) {
+                Image(systemName: "chevron.down")
             }
             .fixedSize()
         }
         .padding(.horizontal, 14)
         .padding(.vertical, 7)
-        .background(backgroundForStatus(store.record.status))
     }
 
     // MARK: - Normal Row
@@ -161,13 +178,14 @@ struct BBAERecordRowView: View {
                 Spacer()
 
                 // Status label
-                Text(store.record.status.displayString())
-                    .font(.system(size: 10, weight: .semibold))
+                Text(store.record.status.displayString().uppercased())
+                    .font(.system(size: 9, weight: .bold))
+                    .tracking(1)
                     .foregroundColor(statusColor(store.record.status))
-                    .padding(.horizontal, 6)
-                    .padding(.vertical, 2)
-                    .background(statusColor(store.record.status).opacity(0.12))
-                    .cornerRadius(4)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .background(statusColor(store.record.status).opacity(0.15))
+                    .cornerRadius(6)
 
                 // Active for rendering toggle
                 UMUIMiniSwitch("Render", isOn: Binding(
@@ -219,41 +237,49 @@ struct BBAERecordRowView: View {
 
             // — Row Footer —
             HStack(spacing: 6) {
-                UMUICapsuleButton("Save to Disk", style: .gray, size: .small) {
+                UMUIMiniButton("Save", style: .gray) {
                     saveToDisk()
                 }
                 .lineLimit(1).fixedSize()
 
-                UMUICapsuleButton("Reveal", systemImage: "folder", style: .gray, size: .small) {
+                UMUIMiniButton("Reveal", systemImage: "folder", style: .gray) {
                     revealInFinder()
                 }
                 .lineLimit(1).fixedSize()
 
-                UMUICapsuleButton("Go to Template", systemImage: "doc.text", style: .gray, size: .small) {
+                UMUIMiniButton("Template", systemImage: "doc.text", style: .gray) {
                     goToTemplate()
                 }
                 .lineLimit(1).fixedSize()
 
                 Spacer()
 
-                UMUICapsuleButton("Compact", systemImage: "minus.circle", style: .gray, size: .small) {
+                UMUIMiniButton(style: .gray, action: {
                     store.record.displayMode = .compact
                     displayMode = .compact
                     store.commitSilent()
+                }) {
+                    Image(systemName: "minus.circle")
                 }
                 .lineLimit(1).fixedSize()
 
-                UMUICapsuleButton("Duplicate", systemImage: "plus.square.on.square", style: .gray, size: .small) {
+                UMUIMiniButton(style: .gray, action: {
                     vc.duplicateRecordInList(store.record.id)
+                }) {
+                    Image(systemName: "plus.square.on.square")
                 }
                 .lineLimit(1).fixedSize()
 
-                UMUICapsuleButton("Delete", systemImage: "trash", style: .gray, size: .small) {
+                UMUIMiniButton(style: .gray, action: {
                     vc.removeRecordFromList(store.record.id)
+                }) {
+                    Image(systemName: "trash")
                 }
                 .lineLimit(1).fixedSize()
 
-                UMUICapsuleButton("Render", systemImage: "play.fill", style: .accent, size: .small) {
+                UMUIHSpacer(4)
+
+                UMUIMiniButton("Render", systemImage: "play.fill", style: .accent) {
                     renderRecord()
                 }
                 .lineLimit(1).fixedSize()
@@ -261,8 +287,6 @@ struct BBAERecordRowView: View {
             .padding(.horizontal, 14)
             .padding(.bottom, 10)
         }
-        .background(backgroundForStatus(store.record.status))
-        .cornerRadius(0)
     }
 
     // MARK: - Actions
@@ -370,16 +394,39 @@ struct BBAERecordRowView: View {
 
     @ViewBuilder
     private func statusDot(_ status: BBAERecord.Status) -> some View {
+        let color = statusColor(status)
         Circle()
-            .fill(statusColor(status))
-            .shadow(color: statusColor(status).opacity(0.5), radius: 3)
+            .fill(color)
+            .shadow(color: color.opacity(0.6), radius: 4)
+            .scaleEffect((status == .rendering && isPulsing) ? 1.4 : 1.0)
+            .opacity((status == .rendering && isPulsing) ? 0.6 : 1.0)
+            .onAppear {
+                if status == .rendering {
+                    withAnimation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true)) {
+                        isPulsing = true
+                    }
+                }
+            }
+            .onChange(of: status) { newStatus in
+                if newStatus == .rendering {
+                    withAnimation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true)) {
+                        isPulsing = true
+                    }
+                } else {
+                    withAnimation {
+                        isPulsing = false
+                    }
+                }
+            }
     }
 
-    private func backgroundForStatus(_ status: BBAERecord.Status) -> Color {
+    private func backgroundForStatus(_ status: BBAERecord.Status, isHovered: Bool = false) -> Color {
+        let baseColor: Color
         switch status {
-        case .rendering: return Color.blue.opacity(0.04)
-        case .rendered:  return Color.green.opacity(0.03)
-        default:         return Color.clear
+        case .rendering: baseColor = Color.blue.opacity(0.08)
+        case .rendered:  baseColor = Color.green.opacity(0.06)
+        default:         baseColor = Color(NSColor(deviceWhite: 0.16, alpha: 1))
         }
+        return isHovered ? baseColor.opacity(0.8) : baseColor
     }
 }

@@ -430,9 +430,8 @@ struct BBAEProjectHeaderView: View {
 			.frame(width: 140)
 			
 			// Pending Only Toggle Button
-			UMUICapsuleButton(
+			UMUIMiniButton(
 				style: vc.showToBeRenderedOnly ? .accent : .gray,
-				size: .small,
 				action: {
 					vc.showToBeRenderedOnly.toggle()
 					vc.updateLiveData()
@@ -445,7 +444,7 @@ struct BBAEProjectHeaderView: View {
 							.aspectRatio(contentMode: .fit)
 							.frame(width: 12, height: 12)
 					}
-					Text("Pending Only")
+					Text("Pending")
 						.font(.system(size: 11))
 						.lineLimit(1)
 				}
@@ -453,23 +452,22 @@ struct BBAEProjectHeaderView: View {
 			.fixedSize(horizontal: true, vertical: false)
 			
 			// Compact Mode Toggle Button
-			UMUICapsuleButton(
-				vc.displayMode == .normal ? "Compact View" : "Normal View",
+			UMUIMiniButton(
+				vc.displayMode == .normal ? "Compact" : "Normal",
 				systemImage: vc.displayMode == .normal ? "square.dashed.inset.filled" : "list.bullet.rectangle",
 				style: .gray,
-				size: .small,
 				action: {
 					vc.btnCompactPressed(vc)
 				}
 			)
 			.fixedSize(horizontal: true, vertical: false)
 			
-			UMUICapsuleButton("Templates", systemImage: "doc.text", style: .gray, size: .small) {
+			UMUIMiniButton("Templates", systemImage: "doc.text", style: .gray) {
 				vc.btnTemplates(vc)
 			}
 			.fixedSize(horizontal: true, vertical: false)
 			
-			UMUICapsuleButton("Template Panel", systemImage: "rectangle.3.group", style: .gray, size: .small) {
+			UMUIMiniButton("Panel", systemImage: "rectangle.3.group", style: .gray) {
 				vc.btnTemplatePanelPressed(vc)
 			}
 			.fixedSize(horizontal: true, vertical: false)
@@ -528,27 +526,27 @@ struct BBAEProjectFooterView: View {
 			
 			Spacer()
 			
-			UMUICapsuleButton("New", systemImage: "plus", style: .gray, size: .small) {
+			UMUIMiniButton("New", systemImage: "plus", style: .gray) {
 				vc.btnaddItemPressed(vc)
 			}
 			.fixedSize(horizontal: true, vertical: false)
 			
-			UMUICapsuleButton("Colors", systemImage: "paintpalette", style: .gray, size: .small) {
+			UMUIMiniButton("Colors", systemImage: "paintpalette", style: .gray) {
 				vc.btnColorsPressed(vc)
 			}
 			.fixedSize(horizontal: true, vertical: false)
 			
-			UMUICapsuleButton("Output", systemImage: "folder", style: .gray, size: .small) {
+			UMUIMiniButton("Output", systemImage: "folder", style: .gray) {
 				vc.btnRenderFolderPressed(vc)
 			}
 			.fixedSize(horizontal: true, vertical: false)
 			
-			UMUICapsuleButton("Project", systemImage: "gearshape", style: .gray, size: .small) {
+			UMUIMiniButton("Project", systemImage: "gearshape", style: .gray) {
 				vc.btnProjectSettingsPressed(vc)
 			}
 			.fixedSize(horizontal: true, vertical: false)
 			
-			UMUICapsuleButton("Render", systemImage: "play.fill", style: .accent, size: .small) {
+			UMUIMiniButton("Render", systemImage: "play.fill", style: .accent) {
 				vc.btnRenderPressed(vc)
 			}
 			.fixedSize(horizontal: true, vertical: false)
